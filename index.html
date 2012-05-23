@@ -160,16 +160,24 @@
 	}
 	function DeInitialize()
 	{
-	   var BaseImage = document.getElementById("BaseImage");
-				BaseImage.parentElement.removeChild(BaseImage);
-				
-	   for(var i =0; i < dim; i++)
-			for(var j =0; j < dim; j++)
-			{
-				var id = ("tile" + i ) + j;
-				var div = document.getElementById(id);
-				div.parentElement.removeChild(div);
-			}
+		if(initialized == true)
+		{
+		   //var BaseImage = document.getElementById("BaseImage");
+			//		BaseImage.parentElement.removeChild(BaseImage);
+					
+		   for(var i =0; i < dim; i++)
+				for(var j =0; j < dim; j++)
+				{
+					var id = ("tile" + i ) + j;
+					var div = document.getElementById(id);
+					if(div) div.parentElement.removeChild(div);
+					
+					var id2 = ("tilebacking" + i ) + j;
+					var div2 = document.getElementById(id2);
+					if(div2) div2.parentElement.removeChild(div2);
+				}
+			initialized = false;	
+		}
 	}
 	function Initialize()
 	{
@@ -427,6 +435,9 @@
 	   jqmSimpleMessage("Resetting", function(){ 
 	   localStorage['UserName'] = ''; 
 	   localStorage['Progress'] = '[]'; 
+	   Progress = [];
+	   Count = 0;
+	   DeInitialize();
 	   $.mobile.changePage($('#login'));
 	   });
 	   
@@ -470,7 +481,8 @@
 	function ProfilesReceivedSignIn(e)
 	{
 	    
-	    if(e) gProfiles = JSON.parse(e.responseText).statements;
+	    if(e) 
+		{   gProfiles = JSON.parse(e.responseText).statements;
 			
 			var profile = null;
 			for(var i = 0; i < gProfiles.length; i++)
@@ -490,14 +502,15 @@
 				
 				 window.setTimeout(function(){
 				 
-				 window.location  = $.mobile.path.parseUrl(window.location.href).hrefNoHash;
-				 
+				 //window.location  = $.mobile.path.parseUrl(window.location.href).hrefNoHash;
+				 LoadProgressFromLRS();
 				 },200);
 			}else
 			{
 				jqmSimpleMessage("Invalid Login");
 			}
 		}
+	}
 		
 	
 	
@@ -784,11 +797,48 @@ return true;
 		
 		for(var j =0; j < Math.min(20,counts.length);j++)
 		{
-			var li = "<li><a onclick=\"PopulateScorePage('"+counts[j].name+"','"+counts[j].email+ "','"+counts[j].count +"')\" href='#UserScore' data-rel='dialog'>"+counts[j].name+"</a><span class='ui-li-count'>"+counts[j].count+"</span></li>"
+			var li = "<li><a onclick=\"PopulateScorePage('"+counts[j].name+"','"+counts[j].email+ "','"+counts[j].count +"')\" href='#UserScore'>"+counts[j].name+"</a><span class='ui-li-count'>"+counts[j].count+"</span></li>"
 			document.getElementById('lboard').innerHTML += li;
 		}
 		$('#lboard').listview('refresh');
 		jqmDialogClose();
+	}
+	
+	function LoadProgressFromLRSCallback(e)
+	{
+		
+		var counts = [];
+	    var statements = JSON.parse(e.responseText).statements;
+		var progress=[];
+		for(var i in statements)
+		{
+			var found = false;
+			var actorname = statements[i].actor.name[0];
+			var actoremail = statements[i].actor.mbox[0];
+			
+			if(actoremail == "mailto:" + localStorage['UserEMail'])
+			{
+				progress.push(statements[i].object.id);
+				console.log('got progress ' + statements[i].object.id);
+			}
+		}
+		Progress = progress;
+		localStorage['Progress'] = JSON.stringify(Progress);
+		ShowGamePage();
+		jqmDialogClose();
+	}
+	
+	function LoadProgressFromLRS()
+	{
+	     try{
+	        InitLRSConnection();
+	        jqmDialogOpen("Loading progress");
+			TCDriver_GetStatements(tc_lrs,null,'attempted',null,LoadProgressFromLRSCallback);
+			}catch(e)
+			{
+			//alert(JSON.stringify(e));
+			//jqmDialogClose();
+			}
 	}
 	
 	function PopulateLeaderBoard()
@@ -808,7 +858,7 @@ return true;
 	function DoManualEntry()
 	{
 	
-		var code = $('#manualcode').val();
+		var code = $('#manualcode').val().toLowerCase();
 		Initialize();
 		if(IsValidCode(code))
         {
@@ -973,11 +1023,11 @@ $('#Help').live('pagebeforeshow',function(){
 	  $('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonA').addClass('ui-btn-active');
 	   });		   
 	   
-$('.footerbuttonGB').live('vmousedown',function(){
+$('.footerbuttonGB').live('vclick',function(){
 	$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonGB').addClass('ui-btn-active');
 	$.mobile.changePage('#GameBoard',{transition:'slide'});	
 });	   
-$('.footerbuttonLB').live('vmousedown',function(){
+$('.footerbuttonLB').live('vclick',function(){
 	$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonLB').addClass('ui-btn-active');
 	if($.mobile.activePage[0].id == 'GameBoard')
 		$.mobile.changePage('#LeaderBoard',{transition:'slide'});	
@@ -985,20 +1035,39 @@ $('.footerbuttonLB').live('vmousedown',function(){
 		$.mobile.changePage('#LeaderBoard');
 		
 });
-$('.footerbuttonME').live('vmousedown',function(){
+$('.footerbuttonME').live('vclick',function(){
 	$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonME').addClass('ui-btn-active');
 	if($.mobile.activePage[0].id == 'GameBoard')
 		$.mobile.changePage('#ManualEntry',{transition:'slide'});	
 	else
 		$.mobile.changePage('#ManualEntry');	
 });
-$('.footerbuttonA').live('vmousedown',function(){
+$('.footerbuttonA').live('vclick',function(){
 	$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonA').addClass('ui-btn-active');
 	if($.mobile.activePage[0].id == 'GameBoard')
 		$.mobile.changePage('#Help',{transition:'slide'});	
 	else
 		$.mobile.changePage('#Help');	
-});			
+});
+	 
+	 
+$('.footerbuttonGB').live('touchstart',function(){
+	$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonGB').addClass('ui-btn-active');
+	
+});	   
+$('.footerbuttonLB').live('touchstart',function(){
+	$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonLB').addClass('ui-btn-active');
+
+		
+});
+$('.footerbuttonME').live('touchstart',function(){
+	$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonME').addClass('ui-btn-active');
+	
+});
+$('.footerbuttonA').live('touchstart',function(){
+	$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonA').addClass('ui-btn-active');
+	
+});						
 	</script>
 
 
@@ -1094,7 +1163,7 @@ $('.footerbuttonA').live('vmousedown',function(){
 		<div id='scorename'></div></br>
 		<div id='scoreemail'></div></br>
 		<div id='scoreval'></div></br>
-		<a id='toLeaderBoard' href="#LeaderBoard"  data-role="button">Close</a>
+		<a id='toLeaderBoard' href="#LeaderBoard" data-icon='back' data-role="button">Back</a>
 		</div>
 				
 	<div data-role="footer" data-theme="d" data-position="fixed">
