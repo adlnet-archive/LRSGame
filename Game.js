@@ -64,7 +64,10 @@ function InitQuestions()
 
     //Associate questions with codes
     for(var i = 0; i < codes.length; i++)
-	gQuestions[codes[i]] = questions[Math.floor(Math.random() * questions.length)];
+	{
+		gQuestions[codes[i]] = questions[Math.floor(Math.random() * questions.length)];
+		
+	}
 }
 //Remove from the gameboard all the elements createded during initilaize
 function DeInitialize()
@@ -126,12 +129,14 @@ function Initialize()
 //This is called iterivly over time to reveal tiles
 function ReadProgress()
 {
-    //Remove the current tile, ennurmerated by 'Count'
-    var hit = RemoveTile(Progress[Count],500);
+    
 
     //If there are more tiles, wait 150 milliseconds, then remove the next
     if( Count < Progress.length)
     {
+	//Remove the current tile, ennurmerated by 'Count'
+	if(Progress[Count].success == true)
+	var hit = RemoveTile(Progress[Count].code,500);
 	Count++;
 	window.setTimeout(ReadProgress,150);
 	return;
@@ -149,7 +154,7 @@ function ReadProgress()
 	//If for some reason it's the same tile, show a prompt
 	//This should be pretty hard to get to, unless manually entering URL's
 	for(var i = 0; i< Progress.length; i++)
-	    if(Progress[i] == id)
+	    if(Progress[i].code == id)
 	    {
 
 		jqmSimpleMessage('Already Found!!');
@@ -171,9 +176,9 @@ function ReadProgress()
     }
 }
 //Find in a list of strings
-function containsRegex(a, regex){
+function contains(a, regex){
     for(var i = 0; i < a.length; i++) {
-	if(a[i] == regex){
+	if(a[i].code == regex){
 	    return i;
 	}
     }
@@ -198,7 +203,7 @@ function IsValidCode(identifier)
 //True if the code is not in the list of previously discovered codes
 function IsNewCode(identifier)
 {
-    return containsRegex(Progress,identifier) == -1;
+    return contains(Progress,identifier) == -1;
 }
 //Remove a tile from the gameboard, to reveal it's leter
 function RemoveTile(identifier,time)
@@ -214,10 +219,10 @@ function RemoveTile(identifier,time)
 	    if(div && div.identifier == identifier && div.removed == false)
 	    {
 		//Should not be in progress anyway, just in case
-		if(containsRegex(Progress,identifier) == -1)
+		if(contains(Progress,identifier) == -1)
 		{
 		    //Set the progress to include this new code
-		    Progress.push(identifier);	
+		    Progress.push({code:identifier,success:true});	
 		    localStorage.setItem("Progress",JSON.stringify(Progress));
 		}
 		newtop = (((100/dim) * j) + ((100/dim) * .5)) + "%";
@@ -670,12 +675,12 @@ function LogQuestion(name,email,Question,answer,callback)
 	    "id":GetRawURL()+"/"+Question.id,
 	    "definition":{
 		"type":"Question",
-		"name":{"en-US":Question.id},
+		"name":{"en-US":gCurrentId},
 		"description":{"en-US":Question.questiontext}
 	    }
     };
 
-    var result = {success:(answer == Question.correctAnswer),completion : true};
+    var result = {success:(answer === Question.correctAnswer),completion : true};
     var stmt = {
 	    "verb":"answered",
 	    "object":obj,
@@ -716,7 +721,7 @@ function CreateProfile(email,name, password,callback)
 //Used when sorting list of scores
 function compare(x,y)
 {
-    if(x.count < y.count)
+    if(x.correct - x.incorrect < y.correct - y.incorrect )
 	return 1;
     else
 	return -1;
@@ -749,20 +754,29 @@ function PopulateLeaderBoardCallback(e)
     for(var i in statements)
     {
 	//Group the statements buy the name of the actor
-	var found = false;
-	var actorname = statements[i].actor.name[0];
-	var actoremail = statements[i].actor.mbox[0];
-	for(var j in counts)
+	if(statements[i].verb == 'answered')
 	{
-	    if(counts[j].name && counts[j].name == actorname)
-	    {
-		counts[j].count += 1;
-		found = true;
-	    }
-	}
-	if(!found)
-	{
-	    counts.push({name:actorname,count:1,email:actoremail});
+        	var found = false;
+        	var actorname = statements[i].actor.name[0];
+        	var actoremail = statements[i].actor.mbox[0];
+        	for(var j in counts)
+        	{
+        	    if(counts[j].name && counts[j].name == actorname)
+        	    {
+        		if(statements[i].result.success === true)
+        		    counts[j].correct += 1;
+        		else
+        		    counts[j].incorrect += 1;
+        		found = true;
+        	    }
+        	}
+        	if(!found)
+        	{
+        	    if(statements[i].result.success === true)
+        	    	counts.push({name:actorname,correct:1,incorrect:0,email:actoremail});
+        	    else
+        		counts.push({name:actorname,correct:0,incorrect:1,email:actoremail});
+        	}
 	}
     }
     
@@ -774,7 +788,7 @@ function PopulateLeaderBoardCallback(e)
     //For the top 20 names, print them into the leaderboard div
     for(var j =0; j < Math.min(20,counts.length);j++)
     {
-	var li = "<li><a onclick=\"PopulateScorePage('"+counts[j].name+"','"+counts[j].email+ "','"+counts[j].count +"')\" href='#UserScore'>"+counts[j].name+"</a><span class='ui-li-count'>"+counts[j].count+"</span></li>"
+	var li = "<li><a onclick=\"PopulateScorePage('"+counts[j].name+"','"+counts[j].email+ "','"+(counts[j].correct + counts[j].incorrect) +"')\" href='#UserScore'>"+counts[j].name+"</a><span class='ui-li-count'><div style='color:green;display:inline'>"+counts[j].correct +"</div>/<div style='color:red;display:inline'>"+ counts[j].incorrect+"</div></span></li>"
 	document.getElementById('lboard').innerHTML += li;
     }
     $('#lboard').listview('refresh');
@@ -798,7 +812,7 @@ function LoadProgressFromLRSCallback(e)
 	//global progress list
 	if(actoremail == "mailto:" + localStorage['UserEMail'])
 	{
-	    progress.push(statements[i].object.id);
+	    progress.push({code:statements[i].object.definition.name['en-US'],success:statements[i].result.success});
 	    console.log('got progress ' + statements[i].object.id);
 	}
     }
@@ -814,7 +828,7 @@ function LoadProgressFromLRS()
     try{
 	InitLRSConnection();
 	jqmDialogOpen("Loading progress");
-	TCDriver_GetStatements(tc_lrs,null,'attempted',null,LoadProgressFromLRSCallback);
+	TCDriver_GetStatements(tc_lrs,null,'answered',null,LoadProgressFromLRSCallback);
     }catch(e)
     {
 	// alert(JSON.stringify(e));
@@ -830,7 +844,7 @@ function PopulateLeaderBoard()
 	jqmDialogOpen("Downloading Stats");
 	// alert('PopulateLeaderBoard');
 	$('#refresh').addClass('ui-btn-active'); window.setTimeout(function(){$('#refresh').removeClass('ui-btn-active');},200);
-	TCDriver_GetStatements(tc_lrs,null,'attempted',null,PopulateLeaderBoardCallback);
+	TCDriver_GetStatements(tc_lrs,null,'answered',null,PopulateLeaderBoardCallback);
     }catch(e)
     {
 	// alert(JSON.stringify(e));
@@ -917,6 +931,8 @@ function AnswerQuestion(answer)
     {
 	//Dont show a code. Go to page one
 	jqmSimpleMessage('Wrong!',function(){gCurrentAction = "Failed";
+	Progress.push({code:gCurrentId,success:false});	
+	localStorage.setItem("Progress",JSON.stringify(Progress));
 	$.mobile.changePage($('#one'),{transition:'fade'});
 	});
     }
@@ -1002,6 +1018,7 @@ $('#one').live('pagebeforeshow',function(){
     if(gCurrentAction == "Question")
     {
 	gActiveQuestion = GetQuestion(gCurrentId);
+	
 	$.mobile.changePage($('#questionpage'));
 	return;
     }
@@ -1009,6 +1026,7 @@ $('#one').live('pagebeforeshow',function(){
 $('#questionpage').live('pagebeforeshow',function(){
 
     gActiveQuestion = GetQuestion(gCurrentId);
+    
     $('#answer1').html("<br/>"+gActiveQuestion.answer1+"<br/><br/>");
     $('#answer2').html("<br/>"+gActiveQuestion.answer2+"<br/><br/>");
     $('#answer3').html("<br/>"+gActiveQuestion.answer3+"<br/><br/>");
