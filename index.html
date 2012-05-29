@@ -531,7 +531,7 @@
 
 
 
-<div data-role="page" id="GameBoard">
+<div data-role="page" id="GameBoard" data-url="#GameBoard">
 	<div data-role="content" data-theme="a">	
 			<div  id='gamebase' ></div>
 			
@@ -550,6 +550,29 @@
 			
 	</div>
 	
+</div>
+
+<div data-role="page" id="LiveStream" data-url="LiveStream">
+	<div data-role="header" data-position="fixed">
+		<h1>Manual Entry</h1>
+	</div>
+	
+	<ul id='EventList' data-role="listview" data-inset="true">
+	    <li>ListTest</li>
+	</ul>
+	
+	<div data-role="footer" data-theme="d" data-position="fixed" class="ui-bar ui-footer" style="padding-left:1px" data-id="foo1">
+			
+			<div  style="padding-bottom:3px" data-role='navbar'>
+				<ul>
+				<li><a data-role='button' data-icon='grid' class='footerbuttonGB'></a></li>
+				<li><a data-role='button' data-icon='star' class='footerbuttonLB'></a></li>
+				<li><a data-role='button' data-icon='gear' class='footerbuttonME'></a></li>
+				<li><a data-role='button' data-icon='search' class='footerbuttonA'></a></li>	
+				</ul>
+			</div>
+			
+	</div>
 </div>
 
 <div id='newpiece'></div>  

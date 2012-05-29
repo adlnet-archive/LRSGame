@@ -43,18 +43,18 @@
 		gQuestions = {};
 		
 		var questions = [];
-		questions.push(new Question("Test Question Text","dog","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("What is the name of the spec using the <actor><verb><object> construct used in Tin Can API?","Activity Streams","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("Which former ADL mobile learning guru was just inducted into the the USDLA Hall of Fame?","Judy Brown","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("What was the primary problem ADL was formed to solve?","interoperability","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("What is the technology used in the Tin Can API to communicate between systems?","web services","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("What is the name of Mozilla's effort to assign images for competencies or achievements?","Open Badges","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("Who is the ADL Technical Team Lead?","Jonathan Poltrack","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("Which country hosts the central american partnership lab?","Mexico","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("What state is the ADL academic colab located in?","Wisconsin","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("Who is the head of the academic colab? ","Rovy Brannon","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("what is the URL to ADL's TinCan API wiki?","http://tincanapi.wikispaces.com/","cat","horse","mouse",1,"Question"+i));
-		questions.push(new Question("what is the URL to the Tin Can spec on the Tin Can Wiki?","http://tincanapi.wikispaces.com/Tin+Can+API+Specification","cat","horse","mouse",1,"Question"+i));
+		questions.push(new Question("Test Question Text","dog","cat","horse","mouse",1,"Question 1"));
+		questions.push(new Question("What is the name of the spec using the <actor><verb><object> construct used in Tin Can API?","Activity Streams","cat","horse","mouse",1,"Question 2"));
+		questions.push(new Question("Which former ADL mobile learning guru was just inducted into the the USDLA Hall of Fame?","Judy Brown","cat","horse","mouse",1,"Question 3"));
+		questions.push(new Question("What was the primary problem ADL was formed to solve?","interoperability","cat","horse","mouse",1,"Question 4"));
+		questions.push(new Question("What is the technology used in the Tin Can API to communicate between systems?","web services","cat","horse","mouse",1,"Question 5"));
+		questions.push(new Question("What is the name of Mozilla's effort to assign images for competencies or achievements?","Open Badges","cat","horse","mouse",1,"Question 6"));
+		questions.push(new Question("Who is the ADL Technical Team Lead?","Jonathan Poltrack","cat","horse","mouse",1,"Question 7"));
+		questions.push(new Question("Which country hosts the central american partnership lab?","Mexico","cat","horse","mouse",1,"Question 8"));
+		questions.push(new Question("What state is the ADL academic colab located in?","Wisconsin","cat","horse","mouse",1,"Question 9"));
+		questions.push(new Question("Who is the head of the academic colab? ","Rovy Brannon","cat","horse","mouse",1,"Question 10"));
+		questions.push(new Question("what is the URL to ADL's TinCan API wiki?","http://tincanapi.wikispaces.com/","cat","horse","mouse",1,"Question 11"));
+		questions.push(new Question("what is the URL to the Tin Can spec on the Tin Can Wiki?","http://tincanapi.wikispaces.com/Tin+Can+API+Specification","cat","horse","mouse",1,"Question 12"));
 		for(var i = 0; i < codes.length; i++)
 		gQuestions[codes[i]] = questions[Math.floor(Math.random() * questions.length)];
 	}
@@ -126,7 +126,7 @@
 	{
 			var hit = RemoveTile(Progress[Count],500);
 			
-			if( hit === true)
+			if( Count < Progress.length)
 			{
 			   Count++;
 			   window.setTimeout(ReadProgress,150);
@@ -280,8 +280,8 @@
 	        tilecover.style.margin = "0";
 	        tilecover.style.padding = "0";
 	        tilecover.style.position = 'fixed';
-	        //tilecover.style.background = 'url(yellowtile.png)';
-	        //tilecover.style.backgroundSize = '100% 100%';
+	        // tilecover.style.background = 'url(yellowtile.png)';
+	        // tilecover.style.backgroundSize = '100% 100%';
 	        tilecover.src = 'yellowtile.png';
 	        tilecover.id = ("tile" + x ) + y;
 	        tilecover.onload = function(){
@@ -619,11 +619,11 @@ return true;
                     "definition":{
                     	"type":"Question",
                         "name":{"en-US":Question.id},
-                        "description":{"en-US":Question.text}
+                        "description":{"en-US":Question.questiontext}
                     }
                 };
                 
-				var result = {success:(answer == Question.correctAnswer),completion : true};
+		var result = {success:(answer == Question.correctAnswer),completion : true};
                 var stmt = {
                     "verb":"answered",
                     "object":obj,
@@ -795,6 +795,38 @@ return true;
 		}
 	}
 
+	function PollForEventsCallback(e)
+	{
+	    var statements = [];
+	    if(e)
+	    {
+		statements = JSON.parse(e.responseText).statements;
+		
+		for(var i =0; i<statements.length; i++)
+		{
+		    var listcode = $('#EventList').html();
+		    var newline = "<li>"+ statements[i].actor.name[0] + " " +  statements[i].verb + " " + statements[i].object.definition.name['en-US'] +"</li>";
+		    		
+		    $('#EventList').html(newline + listcode);
+		  
+		}
+		$('#EventList').listview('refresh');
+	    }
+	    window.setTimeout(PollForEvents,5000);
+	}
+	function PollForEvents()
+	{
+	    InitLRSConnection();
+	    var now = new Date();
+	    now.setMilliseconds(0);
+	    tc_lrs.until = now;
+	    tc_lrs.since = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours(),now.getMinutes(),now.getSeconds()-5);
+	    
+	    console.log(TCDriver_ISODateString(tc_lrs.until));
+	    console.log(TCDriver_ISODateString(tc_lrs.since));
+	    
+	    TCDriver_GetStatements(tc_lrs,null,null,null,PollForEventsCallback);
+	}
 	function AnswerQuestion(answer)
 	{
 			LogQuestion(localStorage['UserName'],localStorage['UserEMail'],gActiveQuestion,answer,function(){});
@@ -824,7 +856,8 @@ return true;
 	   gCurrentAction = QueryString["action"];
 	   gCurrentId = QueryString["id"];
 	   	
-	   window.location.hash = window.location.hash.substr(0,window.location.hash.indexOf('&'));
+	   if(window.location.hash.indexOf('&') > -1)
+	       window.location.hash = window.location.hash.substr(0,window.location.hash.indexOf('&'));
 	   if(localStorage['UserName'] == null || localStorage['UserName'] == "" && $.mobile.path.parseUrl(window.location).hash != '#login' )
 	   {
 	     jqmDialogOpen('New User Login');
@@ -838,7 +871,7 @@ return true;
 	});
 	
 	$(document).bind("mobileinit", function () {
-	    $.mobile.hashListeningEnabled = false;
+	    
        
     });
 	
@@ -994,3 +1027,4 @@ $('.footerbuttonA').live('touchstart',function(){
 	
 });						
 	
+$('#LiveStream').live('pageinit', function (event) {PollForEvents();});

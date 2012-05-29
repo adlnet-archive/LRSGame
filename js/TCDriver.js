@@ -336,6 +336,12 @@ function TCDriver_GetStatements (lrs,sendActor,verb,activityId, callback) {
         if (lrs.registration) {
         	url += "&registration=" + encodeURIComponent(lrs.registration);
         }
+        if(lrs.since){
+            url += '&since=' + TCDriver_ISODateString(lrs.since);
+        }
+        if(lrs.until){
+            url += '&until=' + TCDriver_ISODateString(lrs.until);
+        }
 		
         var res = XHR_request(lrs,url, "GET", null, lrs.auth, callback);
 		if(res)
