@@ -14,19 +14,23 @@
 <!-- and limitations under the License.                                                          -->
 
 <html>
-  <head>
+<head>
 
 <meta name="HandheldFriendly" content="true" />
-<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1" />
+<meta name="viewport"
+	content="width=device-width, height=device-height, user-scalable=no, initial-scale=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 
-   <script type="text/javascript" src="./js/jquery.js"></script>
-	<script type="text/javascript" src="./js/jquery.mobile-1.1.0.js"></script>
-	<script type="text/javascript" src="./js/TCDriver.js"></script>
-	<script type="text/javascript" src="./js/Base64.js"></script>
-	<link rel="stylesheet" type="text/css" href="./js/jquery.mobile.theme-1.1.0.css" />
-    <link rel="stylesheet" type="text/css" href="./js/jquery.mobile.structure-1.1.0.css" />
-	
+<script type="text/javascript" src="./js/jquery.js"></script>
+<script type="text/javascript" src="./js/jquery.mobile-1.1.0.js"></script>
+<script type="text/javascript" src="./js/TCDriver.js"></script>
+<script type="text/javascript" src="./js/Base64.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="./js/jquery.mobile.theme-1.1.0.css" />
+<link rel="stylesheet" type="text/css"
+	href="./js/jquery.mobile.structure-1.1.0.css" />
+
+
 	<style type="text/css"> 
 
 
@@ -92,490 +96,604 @@
 	}
 	</style>
 
-	
-
-    
-    
-	
-	<script src='game.js' type="text/javascript"> </script>
 
 
-  </head>
-  <body>
 
-  
-<div style='min-height:100%' data-role="page" id="one">
 
-	<div data-role="header" data-position="fixed">
-		<h1>TinCan Game</h1>
-	</div>
+<script src='game.js' type="text/javascript"> </script>
 
-	<div data-role="content" >	
-		
-		
-		<h1>TinCan Game Description</h1>	
-		
-		<p>This needs some more data</p>	
-	
-		<div data-role="controlgroup">
-		<a id='togameboard' data-role="button">Show Game Board</a>
-		<a id='toLeaderBoard' href="#LeaderBoard"  data-role="button">Show Leader Board</a>
-        <a href="#ManualEntry"  data-role="button">Enter Code</a>		
-		<a href="#Help" data-role="button">About</a>
+
+</head>
+<body>
+
+
+	<div style='min-height: 100%' data-role="page" id="one">
+
+		<div data-role="header" data-position="fixed">
+			<h1>TinCan Game</h1>
 		</div>
-	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" class="ui-bar ui-footer" style="padding-left:1px" data-id="foo1">
-			
-			<div  style="padding-bottom:3px" data-role='navbar'>
+
+		<div data-role="content">
+
+
+			<h1>TinCan Game Description</h1>
+
+			<p>This needs some more data</p>
+
+			<div data-role="controlgroup">
+				<a id='togameboard' data-role="button">Show Game Board</a> <a
+					id='toLeaderBoard' href="#LeaderBoard" data-role="button">Show
+					Leader Board</a> <a href="#ManualEntry" data-role="button">Enter
+					Code</a> <a href="#Help" data-role="button">About</a>
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed"
+			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+
+			<div style="padding-bottom: 3px" data-role='navbar'>
 				<ul>
-				<li><a data-role='button' data-icon='grid' class='footerbuttonGB'></a></li>
-				<li><a data-role='button' data-icon='star' class='footerbuttonLB'></a></li>
-				<li><a data-role='button' data-icon='gear' class='footerbuttonME'></a></li>
-				<li><a data-role='button' data-icon='search' class='footerbuttonA'></a></li>	
+					<li><a data-role='button' data-icon='grid'
+						class='footerbuttonGB'></a>
+					</li>
+					<li><a data-role='button' data-icon='star'
+						class='footerbuttonLB'></a>
+					</li>
+					<li><a data-role='button' data-icon='gear'
+						class='footerbuttonME'></a>
+					</li>
+					<li><a data-role='button' data-icon='search'
+						class='footerbuttonA'></a>
+					</li>
 				</ul>
 			</div>
-			
-	</div>
-</div>
 
-
-
-<div style='min-height:100%' data-role="page" id="questionpage">
-
-	<div data-role="header" data-position="fixed">
-		<h1>Question</h1>
-	</div>
-
-	<div data-role="content" >	
-		
-		<div id='questiontext'>This needs some more data</div>	<br/><br/>
-	
-		<div data-role="controlgroup">
-		<a id='answer1' data-role="button"></a>
-		<a id='answer2' data-role="button"></a>
-		<a id='answer3' data-role="button"></a>
-		<a id='answer4' data-role="button"></a>
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" data-id="foo1">
-	</div>
-</div>
 
 
-<div data-role="page" id="VendorInfo">
 
-	<div data-role="header">
-		<h1>Vendor Info</h1>
-	</div>
+	<div style='min-height: 100%' data-role="page" id="questionpage">
 
-	<div data-role="content" >	
-		
-		<div id='VendorName'></div></br>
-		<a href="#GameBoard"  data-role="button">Close</a>
+		<div data-role="header" data-position="fixed">
+			<h1>Question</h1>
 		</div>
-				
-	<div data-role="footer" data-theme="d" data-position="fixed">
-		<h4>ADL TinCan Game Demo</h4>
-	</div>
-</div>
 
-<div data-role="page" id="UserScore">
+		<div data-role="content">
 
-	<div data-role="header">
-		<h1>Scores</h1>
-	</div>
+			<div id='questiontext'>This needs some more data</div>
+			<br />
+			<br />
 
-	<div data-role="content" >	
-		
-		<div id='scorename'></div></br>
-		<div id='scoreemail'></div></br>
-		<div id='scoreval'></div></br>
-		<a id='toLeaderBoard' href="#LeaderBoard" data-icon='back' data-role="button">Back</a>
+			<div data-role="controlgroup">
+				<a id='answer1' data-role="button"></a> <a id='answer2'
+					data-role="button"></a> <a id='answer3' data-role="button"></a> <a
+					id='answer4' data-role="button"></a>
+			</div>
 		</div>
-				
-	<div data-role="footer" data-theme="d" data-position="fixed">
-		<h4>ADL TinCan Game Demo</h4>
-	</div>
-</div>
 
-
-<div data-role="page" id="LeaderBoard">
-
-	<div data-role="header" data-position="fixed">
-		<h1>Leader Board</h1>
+		<div data-role="footer" data-theme="d" data-position="fixed"
+			data-id="foo1"></div>
 	</div>
 
-	<div data-role="content" >	
-		
-	
-		<div data-role="controlgroup">
-		<div >
-		<ul id='lboard' data-role="listview" data-inset="true">
-			    
-				
-		</ul>
+
+	<div data-role="page" id="VendorInfo">
+
+		<div data-role="header">
+			<h1>Vendor Info</h1>
 		</div>
-		
-		<a id='refresh' data-role="button">Refresh</a>
-		
-		
+
+		<div data-role="content">
+
+			<div id='VendorName'></div>
+			<br /> <a href="#GameBoard" data-role="button">Close</a>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed">
+			<h4>ADL TinCan Game Demo</h4>
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" class="ui-bar ui-footer" style="padding-left:1px" data-id="foo1">
-			
-			<div  style="padding-bottom:3px" data-role='navbar'>
+
+	<div data-role="page" id="UserScore">
+
+		<div data-role="header">
+			<h1>Scores</h1>
+		</div>
+
+		<div data-role="content">
+
+			<div id='scorename'></div>
+			<br />
+			<div id='scoreemail'></div>
+			<br />
+			<div id='scoreval'></div>
+			<br /> <a id='toLeaderBoard' href="#LeaderBoard" data-icon='back'
+				data-role="button">Back</a>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed">
+			<h4>ADL TinCan Game Demo</h4>
+		</div>
+	</div>
+
+
+	<div data-role="page" id="LeaderBoard">
+
+		<div data-role="header" data-position="fixed">
+			<h1>Leader Board</h1>
+		</div>
+
+		<div data-role="content">
+
+
+			<div data-role="controlgroup">
+				<div>
+					<ul id='lboard' data-role="listview" data-inset="true">
+
+
+					</ul>
+				</div>
+
+				<a id='refresh' data-role="button">Refresh</a>
+
+
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed"
+			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+
+			<div style="padding-bottom: 3px" data-role='navbar'>
 				<ul>
-				<li><a data-role='button' data-icon='grid' class='footerbuttonGB'></a></li>
-				<li><a data-role='button' data-icon='star' class='footerbuttonLB'></a></li>
-				<li><a data-role='button' data-icon='gear' class='footerbuttonME'></a></li>
-				<li><a data-role='button' data-icon='search' class='footerbuttonA'></a></li>	
+					<li><a data-role='button' data-icon='grid'
+						class='footerbuttonGB'></a>
+					</li>
+					<li><a data-role='button' data-icon='star'
+						class='footerbuttonLB'></a>
+					</li>
+					<li><a data-role='button' data-icon='gear'
+						class='footerbuttonME'></a>
+					</li>
+					<li><a data-role='button' data-icon='search'
+						class='footerbuttonA'></a>
+					</li>
 				</ul>
 			</div>
-			
-	</div>
-</div>
 
-<div data-role="page" id="Help">
-
-	<div data-role="header" data-position="fixed">
-		<h1>Game Help</h1>
-	</div>
-
-	<div data-role="content" >	
-		
-		<p>This Demo application uses the Rustici LRS and ADL LRS technology to track user's performance data.</p>	
-		<p>Scan QR codes from around the conference to reveal parts of the image. When you know who the image is, submit your answer to the ADL staff.</p>
-		<p>The LRS requires an 'Actor name' for you. When you first start the application, you'll be prompted to enter one. This data will be used to associate an event in the LRS with you.</p>
-		<p>Use the Reset Button Below to reset your progress and forget your Actor Name. You'll have to choose a different name next time you want to play, because the data will already be stored and finalized.</p>
-		<div data-role="controlgroup">
-		
-		<a  href="#UserInfo" data-role="button" data-rel='dialog'>User Info</a>
-		<a  href="#resetpage" data-role="button" data-rel='dialog'>Reset</a>	
-			
-		
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" class="ui-bar ui-footer" style="padding-left:1px" data-id="foo1">
-			
-			<div  style="padding-bottom:3px" data-role='navbar'>
+
+	<div data-role="page" id="Help">
+
+		<div data-role="header" data-position="fixed">
+			<h1>Game Help</h1>
+		</div>
+
+		<div data-role="content">
+
+			<p>This Demo application uses the Rustici LRS and ADL LRS
+				technology to track user's performance data.</p>
+			<p>Scan QR codes from around the conference to reveal parts of
+				the image. When you know who the image is, submit your answer to the
+				ADL staff.</p>
+			<p>The LRS requires an 'Actor name' for you. When you first start
+				the application, you'll be prompted to enter one. This data will be
+				used to associate an event in the LRS with you.</p>
+			<p>Use the Reset Button Below to reset your progress and forget
+				your Actor Name. You'll have to choose a different name next time
+				you want to play, because the data will already be stored and
+				finalized.</p>
+			<div data-role="controlgroup">
+
+				<a href="#UserInfo" data-role="button" data-rel='dialog'>User
+					Info</a> <a href="#resetpage" data-role="button" data-rel='dialog'>Reset</a>
+
+
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed"
+			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+
+			<div style="padding-bottom: 3px" data-role='navbar'>
 				<ul>
-				<li><a data-role='button' data-icon='grid' class='footerbuttonGB'></a></li>
-				<li><a data-role='button' data-icon='star' class='footerbuttonLB'></a></li>
-				<li><a data-role='button' data-icon='gear' class='footerbuttonME'></a></li>
-				<li><a data-role='button' data-icon='search' class='footerbuttonA'></a></li>	
+					<li><a data-role='button' data-icon='grid'
+						class='footerbuttonGB'></a>
+					</li>
+					<li><a data-role='button' data-icon='star'
+						class='footerbuttonLB'></a>
+					</li>
+					<li><a data-role='button' data-icon='gear'
+						class='footerbuttonME'></a>
+					</li>
+					<li><a data-role='button' data-icon='search'
+						class='footerbuttonA'></a>
+					</li>
 				</ul>
 			</div>
-			
-	</div>
-</div>
 
-
-<div data-role="page" id="UserInfo">
-
-	<div data-role="header">
-		<h1>User Info</h1>
-	</div>
-
-	<div data-role="content" >	
-		
-		<p>You are logged in as:</p>	
-		<p><div id='currentusername'></div></p>	
-		<p><div id='currentuseremail'></div></p>	
-		<div data-role="controlgroup">
-		<a  href="#Help" data-role="button">Ok</a>		
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" >
+
+
+	<div data-role="page" id="UserInfo">
+
+		<div data-role="header">
+			<h1>User Info</h1>
+		</div>
+
+		<div data-role="content">
+
+			<p>You are logged in as:</p>
+			<p></p>
+			<div id='currentusername'></div>
+			<p></p>
+			<p></p>
+			<div id='currentuseremail'></div>
+			<p></p>
+			<div data-role="controlgroup">
+				<a href="#Help" data-role="button">Ok</a>
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed">
 			<h4>ADL TinCan Demo</h4>
-	</div>
-</div>
-
-<div data-role="page" id="resetpage">
-
-	<div data-role="header" data-position="fixed">
-		<h1>Game Reset</h1>
-	</div>
-
-	<div data-role="content" >	
-		
-		<p>Are you sure you want to reset? You will loose all game progress, and have to create a new name to play again.</p>	
-		
-		<div data-role="controlgroup">
-		
-		<a id='reset' data-role="button">Confirm Reset</a>	
-		<a  href="#Help" data-role="button">Cancel</a>		
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed"  >
-		<h4>ADL TinCan Demo</h4>
-	</div>
-</div>
 
+	<div data-role="page" id="resetpage">
 
+		<div data-role="header" data-position="fixed">
+			<h1>Game Reset</h1>
+		</div>
 
-<div data-role="page" id="SignIn">
+		<div data-role="content">
 
-	<div data-role="header" data-position="fixed">
-		<h1>Sign Up</h1>
-	</div>
+			<p>Are you sure you want to reset? You will loose all game
+				progress, and have to create a new name to play again.</p>
 
-	<div data-role="content" >	
-		
-		<p>Please enter an email address below.</p>
-		<p><input type='text' id='email2'></input></p>
-			
-		<p>Please enter a password below.</p>
-		<p><input type='password' id='password2'></input></p>	
-		
-		<div data-role="controlgroup">
-		<a id='signinok'  data-role="button">Ok</a>		
-		<a href="#login" data-role="button">Cancel</a>
+			<div data-role="controlgroup">
+
+				<a id='reset' data-role="button">Confirm Reset</a> <a href="#Help"
+					data-role="button">Cancel</a>
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed">
+			<h4>ADL TinCan Demo</h4>
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed">
-		<h4>ADL TinCan Game Demo</h4>
-	</div>
-</div>
 
-<div data-role="page" id="SignUp">
 
-	<div data-role="header" data-position="fixed">
-		<h1>Sign Up</h1>
-	</div>
 
-	<div data-role="content" >	
-		
-		<p>The LRS requires an 'Actor name' for you. This data will be used to associate an event in the LRS with you.</p>
-		<p>You'll have to choose a unique name so that your data is not confused with any one else's</p>
+	<div data-role="page" id="SignIn">
 
-		<p>Please enter a username below.</p>	
-		
-		<div data-role="controlgroup">
-		
-		<p><input type='text' id='username'></input></p>
-		
-		<p>Please enter an email address below.</p>
-		<p><input type='text' id='email'></input></p>
-		
-		<p>Please enter a password below.</p>
-		<p><input type='password' id='password'></input></p>
-		
-		<p>Please confirm the password.</p>
-		<p><input type='password' id='password1'></input></p>
-		<a id='usernameok'  data-role="button">Ok</a>		
-		<a href="#login" data-role="button">Cancel</a>
+		<div data-role="header" data-position="fixed">
+			<h1>Sign Up</h1>
+		</div>
+
+		<div data-role="content">
+
+			<p>Please enter an email address below.</p>
+			<p>
+				<input type='email' placeholder="name@example.com" id='email2' />
+			</p>
+
+			<p>Please enter a password below.</p>
+			<p>
+				<input type='password' id='password2' placeholder='password' />
+			</p>
+
+			<div data-role="controlgroup">
+				<a id='signinok' data-role="button">Ok</a> <a href="#login"
+					data-role="button">Cancel</a>
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed">
+			<h4>ADL TinCan Game Demo</h4>
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed">
-		<h4>ADL TinCan Game Demo</h4>
-	</div>
-</div>
 
+	<div data-role="page" id="SignUp">
 
-<div data-role="page" id="login">
+		<div data-role="header" data-position="fixed">
+			<h1>Sign Up</h1>
+		</div>
 
-	<div data-role="header" data-position="fixed">
-		<h1>Actor Name</h1>
-	</div>
+		<div data-role="content">
 
-	<div data-role="content" >	
-		
-		<p>The LRS requires an 'Actor name' for you. This data will be used to associate an event in the LRS with you.</p>
-		<p>You'll have to choose a unique name so that your data is not confused with any one else's</p>
+			<p>The LRS requires an 'Actor name' for you. This data will be
+				used to associate an event in the LRS with you.</p>
+			<p>You'll have to choose a unique name so that your data is not
+				confused with any one else's</p>
 
-		<a href='#SignUp' data-role="button">Create Account</a>		
-		<a href='#SignIn' data-role="button">Sign In</a>
-		
-	</div>
+			<p>Please enter a username below.</p>
 
-	
-	<div data-role="footer" data-theme="d" data-position="fixed">
-		<h4>ADL TinCan Game Demo</h4>
-	</div>
-</div>
+			<div data-role="controlgroup">
 
-<div data-role="page" id="SubmitGuess">
+				<p>
+					<input type='text' placeholder='name' id='username' />
+				</p>
 
-	<div data-role="header" data-position="fixed">
-		<h1>Guess the answer</h1>
-	</div>
+				<p>Please enter an email address below.</p>
+				<p>
+					<input type='email' placeholder="name@example.com" id='email' />
+				</p>
 
-	<div data-role="content" >	
-		
-		<p>Guess the answer to the puzzle. Carefull, you only get 3 guesses.</p>
-		
+				<p>Please enter a password below.</p>
+				<p>
+					<input type='password' placeholder='password' id='password' />
+				</p>
 
-		<p>Enter your guess below.</p>	
-		
-		<div data-role="controlgroup">
-		
-		<p><input type='text' id='guess'></input></p>
-		<a id='GuessOk' data-role="button">Submit Guess</a>		
-		<a  href="#one" data-role="button">Cancel</a>
+				<p>Please confirm the password.</p>
+				<p>
+					<input type='password' placeholder='password' id='password1' />
+				</p>
+				<a id='usernameok' data-role="button">Ok</a> <a href="#login"
+					data-role="button">Cancel</a>
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed">
+			<h4>ADL TinCan Game Demo</h4>
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed">
-		<h4>ADL TinCan Game Demo</h4>
-	</div>
-</div>
 
-<div data-role="page" id="ManualEntryCode">
 
-	<div data-role="header" data-position="fixed">
-		<h1>Manual Entry</h1>
-	</div>
+	<div data-role="page" id="login">
 
-	<div data-role="content" >	
-		
-		<p>If you cannot scan a QR code, you may manually enter it's code. This code is printed near the bottom of the QR code plackard.</p>
-		<p>The code should be 5 letters and is not case sensitive.</p>
+		<div data-role="header" data-position="fixed">
+			<h1>Actor Name</h1>
+		</div>
 
-		<p>Enter the code below.</p>	
-		
-		<div data-role="controlgroup">
-		
-		<p><input type='text' id='manualcode'></input></p>
-		<a id='ManualEntryOk' data-role="button">Ok</a>		
-		
+		<div data-role="content">
+
+			<p>The LRS requires an 'Actor name' for you. This data will be
+				used to associate an event in the LRS with you.</p>
+			<p>You'll have to choose a unique name so that your data is not
+				confused with any one else's</p>
+
+			<a href='#SignUp' data-role="button">Create Account</a> <a
+				href='#SignIn' data-role="button">Sign In</a>
+
+		</div>
+
+
+		<div data-role="footer" data-theme="d" data-position="fixed">
+			<h4>ADL TinCan Game Demo</h4>
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" class="ui-bar ui-footer" style="padding-left:1px" data-id="foo1">
-			
-			<div  style="padding-bottom:3px" data-role='navbar'>
+
+	<div data-role="page" id="SubmitGuess">
+
+		<div data-role="header" data-position="fixed">
+			<h1>Guess the answer</h1>
+		</div>
+
+		<div data-role="content">
+
+			<p>Guess the answer to the puzzle. Carefull, you only get 3
+				guesses.</p>
+
+
+			<p>Enter your guess below.</p>
+
+			<div data-role="controlgroup">
+
+				<p>
+					<input type='text' placeholder='phrase' id='guess' />
+				</p>
+				<a id='GuessOk' data-role="button">Submit Guess</a> <a href="#one"
+					data-role="button">Cancel</a>
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed">
+			<h4>ADL TinCan Game Demo</h4>
+		</div>
+	</div>
+
+	<div data-role="page" id="ManualEntryCode">
+
+		<div data-role="header" data-position="fixed">
+			<h1>Manual Entry</h1>
+		</div>
+
+		<div data-role="content">
+
+			<p>If you cannot scan a QR code, you may manually enter it's
+				code. This code is printed near the bottom of the QR code plackard.</p>
+			<p>The code should be 5 letters and is not case sensitive.</p>
+
+			<p>Enter the code below.</p>
+
+			<div data-role="controlgroup">
+
+				<p>
+					<input type='text' placeholder='code' id='manualcode' />
+				</p>
+				<a id='ManualEntryOk' data-role="button">Ok</a>
+
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed"
+			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+
+			<div style="padding-bottom: 3px" data-role='navbar'>
 				<ul>
-				<li><a data-role='button' data-icon='grid' class='footerbuttonGB'></a></li>
-				<li><a data-role='button' data-icon='star' class='footerbuttonLB'></a></li>
-				<li><a data-role='button' data-icon='gear' class='footerbuttonME'></a></li>
-				<li><a data-role='button' data-icon='search' class='footerbuttonA'></a></li>	
+					<li><a data-role='button' data-icon='grid'
+						class='footerbuttonGB'></a>
+					</li>
+					<li><a data-role='button' data-icon='star'
+						class='footerbuttonLB'></a>
+					</li>
+					<li><a data-role='button' data-icon='gear'
+						class='footerbuttonME'></a>
+					</li>
+					<li><a data-role='button' data-icon='search'
+						class='footerbuttonA'></a>
+					</li>
 				</ul>
 			</div>
-			
-	</div>
-</div>
 
-<div data-role="page" id="ManualEntryAnswer">
-
-	<div data-role="header" data-position="fixed">
-		<h1>Submit Answer</h1>
-	</div>
-
-	<div data-role="content" >	
-		
-		
-		<p>Enter your guess.</p>	
-		
-		<div data-role="controlgroup">
-		
-		<p><input type='text' id='manualanswer'></input></p>
-		<a id='SubmitAnswerOk' data-role="button">Ok</a>		
-		
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" class="ui-bar ui-footer" style="padding-left:1px" data-id="foo1">
-			
-			<div  style="padding-bottom:3px" data-role='navbar'>
+
+	<div data-role="page" id="ManualEntryAnswer">
+
+		<div data-role="header" data-position="fixed">
+			<h1>Submit Answer</h1>
+		</div>
+
+		<div data-role="content">
+
+
+			<p>Enter your guess.</p>
+
+			<div data-role="controlgroup">
+
+				<p>
+					<input placeholder='code' type='text' id='manualanswer' />
+				</p>
+				<a id='SubmitAnswerOk' data-role="button">Ok</a>
+
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed"
+			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+
+			<div style="padding-bottom: 3px" data-role='navbar'>
 				<ul>
-				<li><a data-role='button' data-icon='grid' class='footerbuttonGB'></a></li>
-				<li><a data-role='button' data-icon='star' class='footerbuttonLB'></a></li>
-				<li><a data-role='button' data-icon='gear' class='footerbuttonME'></a></li>
-				<li><a data-role='button' data-icon='search' class='footerbuttonA'></a></li>	
+					<li><a data-role='button' data-icon='grid'
+						class='footerbuttonGB'></a>
+					</li>
+					<li><a data-role='button' data-icon='star'
+						class='footerbuttonLB'></a>
+					</li>
+					<li><a data-role='button' data-icon='gear'
+						class='footerbuttonME'></a>
+					</li>
+					<li><a data-role='button' data-icon='search'
+						class='footerbuttonA'></a>
+					</li>
 				</ul>
 			</div>
-			
-	</div>
-</div>
 
-<div data-role="page" id="ManualEntry">
-
-	<div data-role="header" data-position="fixed">
-		<h1>Manual Entry</h1>
-	</div>
-
-	<div data-role="content" >	
-		
-		
-		
-		<div data-role="controlgroup">
-		<p>If you don't have access to a camera, but wish to enter the QR code manually, choose "Enter A QR Code".</p>
-		<p>If you would like to submit an answer to the puzzle, use "Solve The Puzzle". Remember, you only get 3 guesses!</p>
-		<a href="#ManualEntryCode" data-role="button">Enter A QR Code</a>		
-		<a href="#ManualEntryAnswer" data-role="button">Solve The Puzzle</a>		
-		
 		</div>
 	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" class="ui-bar ui-footer" style="padding-left:1px" data-id="foo1">
-			
-			<div  style="padding-bottom:3px" data-role='navbar'>
+
+	<div data-role="page" id="ManualEntry">
+
+		<div data-role="header" data-position="fixed">
+			<h1>Manual Entry</h1>
+		</div>
+
+		<div data-role="content">
+
+
+
+			<div data-role="controlgroup">
+				<p>If you don't have access to a camera, but wish to enter the
+					QR code manually, choose "Enter A QR Code".</p>
+				<p>If you would like to submit an answer to the puzzle, use
+					"Solve The Puzzle". Remember, you only get 3 guesses!</p>
+				<a href="#ManualEntryCode" data-role="button">Enter A QR Code</a> <a
+					href="#ManualEntryAnswer" data-role="button">Solve The Puzzle</a>
+
+			</div>
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed"
+			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+
+			<div style="padding-bottom: 3px" data-role='navbar'>
 				<ul>
-				<li><a data-role='button' data-icon='grid' class='footerbuttonGB'></a></li>
-				<li><a data-role='button' data-icon='star' class='footerbuttonLB'></a></li>
-				<li><a data-role='button' data-icon='gear' class='footerbuttonME'></a></li>
-				<li><a data-role='button' data-icon='search' class='footerbuttonA'></a></li>	
+					<li><a data-role='button' data-icon='grid'
+						class='footerbuttonGB'></a>
+					</li>
+					<li><a data-role='button' data-icon='star'
+						class='footerbuttonLB'></a>
+					</li>
+					<li><a data-role='button' data-icon='gear'
+						class='footerbuttonME'></a>
+					</li>
+					<li><a data-role='button' data-icon='search'
+						class='footerbuttonA'></a>
+					</li>
 				</ul>
 			</div>
-			
+
+		</div>
 	</div>
-</div>
 
 
 
-<div data-role="page" id="GameBoard" data-url="#GameBoard">
-	<div data-role="content" data-theme="a">	
-			<div  id='gamebase' ></div>
-			
-	</div>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" class="ui-bar ui-footer" style="padding-left:1px" data-id="foo1">
-			
-			<div  style="padding-bottom:3px" data-role='navbar'>
+	<div data-role="page" id="GameBoard" data-url="#GameBoard">
+		<div data-role="content" data-theme="a">
+			<div id='gamebase'></div>
+
+		</div>
+
+		<div data-role="footer" data-theme="d" data-position="fixed"
+			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+
+			<div style="padding-bottom: 3px" data-role='navbar'>
 				<ul>
-				<li><a data-role='button' data-icon='grid' class='footerbuttonGB'></a></li>
-				<li><a data-role='button' data-icon='star' class='footerbuttonLB'></a></li>
-				<li><a data-role='button' data-icon='gear' class='footerbuttonME'></a></li>
-				<li><a data-role='button' data-icon='search' class='footerbuttonA'></a></li>	
+					<li><a data-role='button' data-icon='grid'
+						class='footerbuttonGB'></a>
+					</li>
+					<li><a data-role='button' data-icon='star'
+						class='footerbuttonLB'></a>
+					</li>
+					<li><a data-role='button' data-icon='gear'
+						class='footerbuttonME'></a>
+					</li>
+					<li><a data-role='button' data-icon='search'
+						class='footerbuttonA'></a>
+					</li>
 				</ul>
 			</div>
-			
-	</div>
-	
-</div>
 
-<div data-role="page" id="LiveStream" data-url="LiveStream">
-	<div data-role="header" data-position="fixed">
-		<h1>Manual Entry</h1>
+		</div>
+
 	</div>
-	
-	<ul id='EventList' data-role="listview" data-inset="true">
-	    <li>ListTest</li>
-	</ul>
-	
-	<div data-role="footer" data-theme="d" data-position="fixed" class="ui-bar ui-footer" style="padding-left:1px" data-id="foo1">
-			
-			<div  style="padding-bottom:3px" data-role='navbar'>
+
+	<div data-role="page" id="LiveStream" data-url="LiveStream">
+		<div data-role="header" data-position="fixed">
+			<h1>Manual Entry</h1>
+		</div>
+
+		<ul id='EventList' data-role="listview" data-inset="true">
+			<li>ListTest</li>
+		</ul>
+
+		<div data-role="footer" data-theme="d" data-position="fixed"
+			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+
+			<div style="padding-bottom: 3px" data-role='navbar'>
 				<ul>
-				<li><a data-role='button' data-icon='grid' class='footerbuttonGB'></a></li>
-				<li><a data-role='button' data-icon='star' class='footerbuttonLB'></a></li>
-				<li><a data-role='button' data-icon='gear' class='footerbuttonME'></a></li>
-				<li><a data-role='button' data-icon='search' class='footerbuttonA'></a></li>	
+					<li><a data-role='button' data-icon='grid'
+						class='footerbuttonGB'></a>
+					</li>
+					<li><a data-role='button' data-icon='star'
+						class='footerbuttonLB'></a>
+					</li>
+					<li><a data-role='button' data-icon='gear'
+						class='footerbuttonME'></a>
+					</li>
+					<li><a data-role='button' data-icon='search'
+						class='footerbuttonA'></a>
+					</li>
 				</ul>
 			</div>
-			
-	</div>
-</div>
 
-<div id='newpiece'></div>  
-  
-  </body>
+		</div>
+	</div>
+
+	<div id='newpiece'></div>
+
+</body>
 </html>
