@@ -165,7 +165,8 @@ function ReadProgress()
 	if(IsValidCode(id))
 	{	
 	    //Log the attempt to the LRS if it's a good code.
-	    LogAttempt(localStorage["UserEMail"],localStorage["UserName"],id,function(){		
+	    //Removed! this is not handled during the question answer phase
+	    //LogAttempt(localStorage["UserEMail"],localStorage["UserName"],id,function(){		
 
 		jqmSimpleMessage('New Letter!', function(){RemoveTile(id,500);});})
 	}
@@ -458,7 +459,7 @@ function ProfilesReceivedSignIn(e)
 	//Check the name and password
 	if( gProfiles[i].actor.mbox[0] == "mailto:" + gEmailCheck)
 	{
-	    if(gProfiles[i].context.contextActivities.grouping.id == Base64.encode(gPassword))
+	    if(gProfiles[i].context.contextActivities.grouping.id == SHA1(gPassword))
 		profile = gProfiles[i];
 	}
     }
@@ -705,7 +706,7 @@ function CreateProfile(email,name, password,callback)
     };
     var contextObj = {
 	    "contextActivities":{
-		"grouping":{"id":Base64.encode(password)}
+		"grouping":{"id":SHA1(password)}
 	    }
     };
     var stmt = {
