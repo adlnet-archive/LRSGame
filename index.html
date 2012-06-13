@@ -218,7 +218,7 @@
 	</div>
 
 
-	<div data-role="page" id="LeaderBoard">
+	<div data-role="page" id="LeaderBoard" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
 			<h1>Leader Board</h1>
@@ -264,7 +264,7 @@
 		</div>
 	</div>
 
-	<div data-role="page" id="Help">
+	<div data-role="page" id="Help" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
 			<h1>Game Help</h1>
@@ -317,7 +317,7 @@
 	</div>
 
 
-	<div data-role="page" id="UserInfo">
+	<div data-role="page" id="UserInfo" data-theme="c">
 
 		<div data-role="header">
 			<h1>User Info</h1>
@@ -342,7 +342,7 @@
 		</div>
 	</div>
 
-	<div data-role="page" id="resetpage">
+	<div data-role="page" id="resetpage" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
 			<h1>Game Reset</h1>
@@ -367,7 +367,7 @@
 
 
 
-	<div data-role="page" id="SignIn">
+	<div data-role="page" id="SignIn" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
 			<h1>Sign Up</h1>
@@ -396,7 +396,7 @@
 		</div>
 	</div>
 
-	<div data-role="page" id="SignUp">
+	<div data-role="page" id="SignUp" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
 			<h1>Sign Up</h1>
@@ -442,7 +442,7 @@
 	</div>
 
 
-	<div data-role="page" id="login">
+	<div data-role="page" id="login" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
 			<h1>Actor Name</h1>
@@ -466,42 +466,15 @@
 		</div>
 	</div>
 
-	<div data-role="page" id="SubmitGuess">
+	
 
-		<div data-role="header" data-position="fixed">
-			<h1>Guess the answer</h1>
-		</div>
-
-		<div data-role="content">
-
-			<p>Guess the answer to the puzzle. Carefull, you only get 3
-				guesses.</p>
-
-
-			<p>Enter your guess below.</p>
-
-			<div data-role="controlgroup">
-
-				<p>
-					<input type='text' placeholder='phrase' id='guess' />
-				</p>
-				<a id='GuessOk' data-role="button">Submit Guess</a> <a href="#one"
-					data-role="button">Cancel</a>
-			</div>
-		</div>
-
-		<div data-role="footer" data-theme="d" data-position="fixed">
-			<h4>ADL TinCan Game Demo</h4>
-		</div>
-	</div>
-
-	<div data-role="page" id="ManualEntryCode">
+	<div data-role="page" id="ManualEntryCode" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
 			<h1>Manual Entry</h1>
 		</div>
 
-		<div data-role="content">
+		<div data-role="content" >
 
 			<p>If you cannot scan a QR code, you may manually enter it's
 				code. This code is printed near the bottom of the QR code plackard.</p>
@@ -542,21 +515,22 @@
 		</div>
 	</div>
 
-	<div data-role="page" id="ManualEntryAnswer">
+	<div data-role="page" id="ManualEntryAnswer" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
 			<h1>Submit Answer</h1>
 		</div>
 
-		<div data-role="content">
+		<div data-role="content" >
 
 
-			<p>Enter your guess.</p>
+			<p>Guess the answer to the puzzle. Carefull, you only get 3
+				guesses.</p>
 
 			<div data-role="controlgroup">
 
 				<p>
-					<input placeholder='code' type='text' id='manualanswer' />
+					<textarea rows='3' placeholder='Type the phrase here' type='text' id='SolvedPuzzleGuess' ></textarea>
 				</p>
 				<a id='SubmitAnswerOk' data-role="button">Ok</a>
 
@@ -586,13 +560,13 @@
 		</div>
 	</div>
 
-	<div data-role="page" id="ManualEntry">
+	<div data-role="page" id="ManualEntry" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
 			<h1>Manual Entry</h1>
 		</div>
 
-		<div data-role="content">
+		<div data-role="content" >
 
 
 
@@ -633,7 +607,9 @@
 
 
 	<div data-role="page" id="GameBoard" data-url="#GameBoard">
-		<div data-role="content" data-theme="a">
+		<div data-role="content" data-theme="b" style='height:100px'>
+			<a data-role='button' 
+						href='#ManualEntryAnswer' style='position:absolute;left:5%;width:90%;top:1%;height:8%;margin:0'>Solve the Puzzle</a>
 			<div id='gamebase'></div>
 
 		</div>
@@ -662,6 +638,37 @@
 
 	</div>
 
+
+<div data-role="page" id="puzzleSolved" data-url="puzzleSolved">
+		<div data-role="header" data-position="fixed">
+			<h1>Congratulations!</h1>
+		</div>
+		<img src='fireworksanimation-13.gif' style='width:100%' />
+		<h3>Congratulations. You've successfully solved the puzzle. Your name will be entered to win one of the prizes at the end of the conference!</h3>
+		<div data-role="footer" data-theme="d" data-position="fixed"
+		
+			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+		 
+			<div style="padding-bottom: 3px" data-role='navbar'>
+				<ul>
+					<li><a data-role='button' data-icon='grid'
+						class='footerbuttonGB'></a>
+					</li>
+					<li><a data-role='button' data-icon='star'
+						class='footerbuttonLB'></a>
+					</li>
+					<li><a data-role='button' data-icon='gear'
+						class='footerbuttonME'></a>
+					</li>
+					<li><a data-role='button' data-icon='search'
+						class='footerbuttonA'></a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+	
 	<div data-role="page" id="LiveStream" data-url="LiveStream">
 		<div data-role="header" data-position="fixed">
 			<h1>Manual Entry</h1>

@@ -2,19 +2,21 @@
 var gCurrentAction = '';	//This is the currently executing action of the system. Holds things like "discovered"
 var Game = {};			//A global to namespace all this stuff
 var dim = 7;			//the dimentions of the game board
-var Progress;			//The array of codes already discovered
+var Progress;			//The array of gCodes already discovered
 var Count = 0;			//A global counter used during the progressive reveal of tiles on initialize
 var initialized = false;	//Flag for initialized
 var tc_lrs = null;		//holds LRS connection data
 var gProfiles = null;		//array of profiles from LRS
 var gActiveQuestion;		//The currently executing question
-
-//These are all the codes that will be assigned to tiles on the gameboard
-var codes = [ "star","home","bike","kale","code","left","base","find","wrap","word","case","file","plan","door","save","hard","knife","latch","gecko","phone","geese","thumb","blink","night","house",
+var gGuessMaximum = 5;
+//These are all the gCodes that will be assigned to tiles on the gameboard
+var gCodes = [ "star","home","bike","kale","code","left","base","find","wrap","word","case","file","plan","door","save","hard","knife","latch","gecko","phone","geese","thumb","blink","night","house",
               "games","duck","math","monitor","jumprope","pixel","shader","normal","genus","gabby","sailboat","dell","plain","ridge","bush","tree","farm","nice","giant","cape","knot","mast","coffee","number","chain"];
 //these are the letters under the tiles. '0' means inactive
-var tilestates = 'workingcode000trumps000all0000000000Theory00000000';
-
+var gTilestates = 'workingcode000trumps000all0000000000Theory00000000';
+var gPuzzleAnswer = 'working code trumps all theory';
+var gOrder = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50];
+var gTileCounter = 0;
 //not currently used
 var specialCodes = [{code:'start',type:'extra point',points:1},
                     {code:'match',type:'extra point',points:1},
@@ -62,10 +64,10 @@ function InitQuestions()
     questions.push(new Question("what is the URL to ADL's TinCan API wiki?","http://tincanapi.wikispaces.com/","cat","horse","mouse",1,"Question 11"));
     questions.push(new Question("what is the URL to the Tin Can spec on the Tin Can Wiki?","http://tincanapi.wikispaces.com/Tin+Can+API+Specification","cat","horse","mouse",1,"Question 12"));
 
-    //Associate questions with codes
-    for(var i = 0; i < codes.length; i++)
+    //Associate questions with gCodes
+    for(var i = 0; i < gCodes.length; i++)
 	{
-		gQuestions[codes[i]] = questions[Math.floor(Math.random() * questions.length)];
+		gQuestions[gCodes[i]] = questions[Math.floor(Math.random() * questions.length)];
 		
 	}
 }
@@ -105,17 +107,17 @@ function Initialize()
     //Setup the gameboard div with the background image
     document.getElementById('gamebase').style.position = 'fixed';
     document.getElementById('gamebase').style.width = '100%';
-    document.getElementById('gamebase').style.height = '100%';
-    document.getElementById('gamebase').style.top = '0%';
+    document.getElementById('gamebase').style.height = '90%';
+    document.getElementById('gamebase').style.top = '10%';
     document.getElementById('gamebase').style.left = '0%';
     document.getElementById('gamebase').style.backgroundImage = 'url(blanktile.png)';
-    document.getElementById('gamebase').style.backgroundSize = (100/dim + '% ') + (100/dim + '%');
+    document.getElementById('gamebase').style.backgroundSize = (101/dim + '% ') + (101/dim + '%');
 
 
     //Create a tile in a dim x dim grid
     for(var i =0; i < dim; i++)
 	for(var j =0; j < dim; j++)
-	    CreateTile(i,j,dim,codes[(i*dim)+j]);
+	    CreateTile(i,j,dim,gOrder[(i*dim)+j]);
     
     //If local storage "Progress is blank, make it empty array
     if(!localStorage.getItem("Progress"))
@@ -136,7 +138,7 @@ function ReadProgress()
     {
 	//Remove the current tile, ennurmerated by 'Count'
 	if(Progress[Count].success == true)
-	var hit = RemoveTile(Progress[Count].code,500);
+	var hit = RemoveTile(gOrder[Count],500);
 	Count++;
 	window.setTimeout(ReadProgress,150);
 	return;
@@ -160,15 +162,20 @@ function ReadProgress()
 		jqmSimpleMessage('Already Found!!');
 		return;
 	    }
-	//Same for invalid codes. The GUI on the manual entry page should prevent this, but
+	//Same for invalid gCodes. The GUI on the manual entry page should prevent this, but
 	//someone could enter it directly in the url
 	if(IsValidCode(id))
 	{	
 	    //Log the attempt to the LRS if it's a good code.
 	    //Removed! this is not handled during the question answer phase
 	    //LogAttempt(localStorage["UserEMail"],localStorage["UserName"],id,function(){		
-
-		jqmSimpleMessage('New Letter!', function(){RemoveTile(id,500);});})
+		
+		Progress.push({code:id,success:true});	
+		localStorage.setItem("Progress",JSON.stringify(Progress));
+		
+		jqmSimpleMessage('New Letter!', function(){RemoveTile(gOrder[Progress.length-1],500);})
+		
+		
 	}
 	else
 	{
@@ -188,26 +195,20 @@ function contains(a, regex){
 //True of a code corresponds to a covered tile
 function IsValidCode(identifier)
 {
-    for(var i =0; i < dim; i++)
-	for(var j =0; j < dim; j++)
+	for(var i = 0; i < gCodes.length; i++)
 	{
-
-	    var id = ("tile" + i ) + j;
-	    var div = document.getElementById(id);
-
-	    if(div && div.identifier == identifier)
-	    { return true;}
+		if(gCodes[i] == identifier)
+			return true;
 	}
-
     return false;		
 }
-//True if the code is not in the list of previously discovered codes
+//True if the code is not in the list of previously discovered gCodes
 function IsNewCode(identifier)
 {
     return contains(Progress,identifier) == -1;
 }
 //Remove a tile from the gameboard, to reveal it's leter
-function RemoveTile(identifier,time)
+function RemoveTile(OrderNumber,time)
 {
     //Walk over all the tiles
     for(var i =0; i < dim; i++)
@@ -217,15 +218,16 @@ function RemoveTile(identifier,time)
 	    var div = document.getElementById(id);
 
 	    //If the tile exists, and it's code is the right code, and it's not been removed already
-	    if(div && div.identifier == identifier && div.removed == false)
+	    if(div && div.OrderNumber == OrderNumber && div.removed == false)
 	    {
+		//*** Rob - removed now that tiles are revealed in an order.
 		//Should not be in progress anyway, just in case
-		if(contains(Progress,identifier) == -1)
-		{
-		    //Set the progress to include this new code
-		    Progress.push({code:identifier,success:true});	
-		    localStorage.setItem("Progress",JSON.stringify(Progress));
-		}
+		//if(contains(Progress,identifier) == -1)
+		//{
+		//    //Set the progress to include this new code
+		//    Progress.push({code:identifier,success:true});	
+		//    localStorage.setItem("Progress",JSON.stringify(Progress));
+		//}
 		newtop = (((100/dim) * j) + ((100/dim) * .5)) + "%";
 		
 		//Do the GUI CSS Animations
@@ -277,10 +279,10 @@ function ShowVendorData(tile)
 }
 
 //Create a game tile
-function CreateTile(x,y,count,id)
+function CreateTile(x,y,count)
 {
     //Read the letter that goes under this tile
-    var tilestate = tilestates[y*dim+x];
+    var tilestate = gTilestates[x*dim+y];
     
     //Don't bother createing yellow blocking tiles for letters that are Zero.
     //Zero marks that there is no letter to see
@@ -289,9 +291,9 @@ function CreateTile(x,y,count,id)
 	//Create the white background tile
 	var tile = document.createElement('Div');
 	tile.style.width = ((100/count) + .1) + "%";
-	tile.style.height = ((100/count)+ .1) + "%";
-	tile.style.left = (((100/count) * x)) + "%";
-	tile.style.top = (((100/count) * y)) + "%";
+	tile.style.height = ((90/count)+ .1) + "%";
+	tile.style.left = (((100/count) * y)) + "%";
+	tile.style.top = ((10+(90/count) * x)) + "%";
 	tile.style.margin = "0";
 	tile.style.padding = "0";
 	tile.style.position = 'fixed';
@@ -306,9 +308,9 @@ function CreateTile(x,y,count,id)
 	//Create the yellow covering tile
 	var tilecover = document.createElement('Img');
 	tilecover.style.width = ((100/count) + .1) + "%";
-	tilecover.style.height = ((100/count)+ .1) + "%";
-	tilecover.style.left = (((100/count) * x)) + "%";
-	tilecover.style.top = (((100/count) * y)) + "%";
+	tilecover.style.height = ((90/count)+ .1) + "%";
+	tilecover.style.left = (((100/count) * y)) + "%";
+	tilecover.style.top = ((10+(90/count) * x)) + "%";
 	tilecover.style.margin = "0";
 	tilecover.style.padding = "0";
 	tilecover.style.position = 'fixed';
@@ -320,14 +322,16 @@ function CreateTile(x,y,count,id)
 	tilecover.onload = function(){
 	    tile.innerHTML = tilestate;
 	}
-	tilecover.identifier = id;
+	
+	tilecover.OrderNumber = gTileCounter;
+	gTileCounter++;
 	tilecover.removed = false;
 	document.getElementById('gamebase').appendChild(tilecover);
 	
 	//Debug only function to show tile's code.
 	$(tilecover).click(function(){
 	    if(!tilecover.removed)
-		ShowVendorData(tilecover.identifier);
+		ShowVendorData(tilecover.OrderNumber);
 	});
     }
 }
@@ -366,12 +370,12 @@ function ShowGamePage()
     Initialize();
     //Use the slide transition whenever going to or from the gamepage
     //Some phones fade werid, and show the answer
-    $.mobile.changePage($("#GameBoard"),{transition:"slide"});
+    $.mobile.changePage($("#GameBoard"),{ transition: "slide", changeHash: true });
 }
 //Switch to the start page
 function ShowStartPage()
 {
-    $.mobile.changePage($("#one"),{transition:"slide"});	
+    $.mobile.changePage($("#one"),{ transition: "slide", changeHash: true });	
 }
 
 //Get the URL without any paramerters
@@ -394,10 +398,11 @@ function ResetGame()
     jqmSimpleMessage("Resetting", function(){ 
 	localStorage['UserName'] = ''; 
 	localStorage['Progress'] = '[]'; 
+	localStorage['guesses'] = '[]'; 
 	Progress = [];
 	Count = 0;
 	DeInitialize();
-	$.mobile.changePage($('#login'));
+	$.mobile.changePage($('#login'),{ transition: "fade", changeHash: false });
     });
 
     },200);
@@ -412,36 +417,37 @@ var gPassword;
 function ProfilesReceivedSignUp(e)
 {
     //Get the profiles
-    if(e) gProfiles = JSON.parse(e.responseText).statements;
+    if(e){ gProfiles = JSON.parse(e.responseText).statements;}
+	if(gProfiles)
+	{
+		var profile = null;
+		for(var i = 0; i < gProfiles.length; i++)
+		{
+		if( gProfiles[i].actor.mbox[0] == "mailto:" + gEmailCheck)
+			profile = gProfiles[i];
+		}
+		jqmDialogClose();
+		
+		//If you did not find a profile with the same data, then this is a new one and can proceed
+		if(	profile == null)
+		{
+		localStorage["UserEMail"] = gEmailCheck;
+		localStorage["UserName"] = gTempUsername;
+		//Send the new login data to the LRS
+		CreateProfile(localStorage["UserEMail"],localStorage["UserName"],gPassword);
 
-    var profile = null;
-    for(var i = 0; i < gProfiles.length; i++)
-    {
-	if( gProfiles[i].actor.mbox[0] == "mailto:" + gEmailCheck)
-	    profile = gProfiles[i];
-    }
-    jqmDialogClose();
-    
-    //If you did not find a profile with the same data, then this is a new one and can proceed
-    if(	profile == null)
-    {
-	localStorage["UserEMail"] = gEmailCheck;
-	localStorage["UserName"] = gTempUsername;
-	//Send the new login data to the LRS
-	CreateProfile(localStorage["UserEMail"],localStorage["UserName"],gPassword);
+		window.setTimeout(function(){
+				
+		ShowGamePage();
 
-	window.setTimeout(function(){
-	    	
-	ShowGamePage();
+		},200);
+		}else
+		{
+		//There was a collision with an existing profile, cant create a new one.
+		jqmSimpleMessage("Email Taken. Try Again");
+		}
 
-	},200);
-    }else
-    {
-	//There was a collision with an existing profile, cant create a new one.
-	jqmSimpleMessage("Email Taken. Try Again");
-    }
-
-
+	}
 }
 
 //PRofiles are received callback during sign in
@@ -450,36 +456,39 @@ function ProfilesReceivedSignIn(e)
     
     if(e) 
     {   gProfiles = JSON.parse(e.responseText).statements;
-
-    //Walk all profile events
-    var profile = null;
-    for(var i = 0; i < gProfiles.length; i++)
-    {
-
-	//Check the name and password
-	if( gProfiles[i].actor.mbox[0] == "mailto:" + gEmailCheck)
-	{
-	    if(gProfiles[i].context.contextActivities.grouping.id == SHA1(gPassword))
-		profile = gProfiles[i];
 	}
-    }
-    jqmDialogClose();
-    //Store the login data locally if login is successful
-    if(	profile != null)
-    {
-	localStorage["UserEMail"] = profile.actor.mbox[0].substr(7);
-	localStorage["UserName"] = profile.actor.name[0];
+	if(gProfiles)
+	{
+		//Walk all profile events
+		var profile = null;
+		for(var i = 0; i < gProfiles.length; i++)
+		{
 
-	window.setTimeout(function(){
+			//Check the name and password
+			if( gProfiles[i].actor.mbox[0] == "mailto:" + gEmailCheck)
+			{
+				if(gProfiles[i].context.contextActivities.grouping.id == SHA1(gPassword))
+				profile = gProfiles[i];
+			}
+		}
+		jqmDialogClose();
+		//Store the login data locally if login is successful
+		if(	profile != null)
+		{
+			localStorage["UserEMail"] = profile.actor.mbox[0].substr(7);
+			localStorage["UserName"] = profile.actor.name[0];
 
-	    // Load the user's progress from the LRS events
-	    LoadProgressFromLRS();
-	},200);
-    }else
-    {
-	//Login was not successful - either bad username or password
-	jqmSimpleMessage("Invalid Login");
-    }
+			window.setTimeout(function(){
+
+				// Load the user's progress from the LRS events
+				LoadProgressFromLRS();
+			},200);
+		}else
+		{
+			//Login was not successful - either bad username or password
+			jqmSimpleMessage("Invalid Login");
+		}
+		
     }
 }
 
@@ -641,6 +650,30 @@ function jqmSimpleMessage(message,callback) {
     ;
 }
 
+function LogSubmitGuess(answer,correct)
+{
+    var tcCourseObj = {
+	    "id":"Puzzle",
+	    "definition":{
+		"type":"Course",
+		"name":{"en-US":"answer the puzzle"},
+		"description":{"en-US":answer}
+	    }
+    };
+
+    var result = {success:correct,completion : true};
+    var stmt = {
+	    "verb":"completed",
+	    "object":tcCourseObj,
+	    "actor":{ "mbox":["mailto:" + localStorage["UserEMail"]], "name":[localStorage["UserName"]] },
+		"result":result
+    };
+
+    console.log("TCDriver_SendStatement");
+    TCDriver_SendStatement(tc_lrs, stmt,function(){});
+
+}
+
 //Log to the LRS an attempt to uncover a tile
 function LogAttempt(email,name,id,callback)
 {
@@ -797,6 +830,36 @@ function PopulateLeaderBoardCallback(e)
 }
 
 //Read the scores from the LRS to get the progress for someone logging in on a new device
+function LoadGuessesFromLRSCallback(e)
+{
+	
+    var statements = JSON.parse(e.responseText).statements;
+    var guesses = [];
+    for(var i in statements)
+    {
+		var found = false;
+		var actorname = statements[i].actor.name[0];
+		var actoremail = statements[i].actor.mbox[0];
+		
+		
+		//If the statement actor is the logged in actor, push the ID of the tile onto the 
+		//global progress list
+		if(actoremail == "mailto:" + localStorage['UserEMail'])
+		{
+			guesses.push(statements[i].object.definition.description['en-US']);
+			console.log('got progress ' + statements[i].object.definition.description['en-US']);
+		}
+    }
+    //Save this data in localstoragte for next time
+    
+    localStorage['guesses'] = JSON.stringify(guesses);
+	
+	jqmDialogClose();
+	
+    ShowGamePage();
+}
+
+//Read the scores from the LRS to get the progress for someone logging in on a new device
 function LoadProgressFromLRSCallback(e)
 {
 
@@ -820,8 +883,14 @@ function LoadProgressFromLRSCallback(e)
     //Save this data in localstoragte for next time
     Progress = progress;
     localStorage['Progress'] = JSON.stringify(Progress);
-    ShowGamePage();
+	
+	
+	
+    
     jqmDialogClose();
+	
+	jqmDialogOpen("Loading Puzzle Guesses");
+	TCDriver_GetStatements(tc_lrs,null,'completed',null,LoadGuessesFromLRSCallback);
 }
 //Load the progress from the LRS.
 function LoadProgressFromLRS()
@@ -867,7 +936,7 @@ function DoManualEntry()
 	{
 	    gCurrentAction = 'Question';
 	    gCurrentId = code;
-	    $.mobile.changePage($('#questionpage'));
+	    $.mobile.changePage($('#questionpage'),{ transition: "fade", changeHash: false });
 
 	}else
 	{
@@ -926,7 +995,8 @@ function AnswerQuestion(answer)
 	//Show them a code
 	jqmSimpleMessage('Correct!',function(){
 	    gCurrentAction = "Discovered";
-	    $.mobile.changePage($('#GameBoard'),{transition:'slide'});
+	    $.mobile.changePage($('#GameBoard'),{ transition: "slide", changeHash: false });
+		
 	});
     }else
     {
@@ -934,8 +1004,25 @@ function AnswerQuestion(answer)
 	jqmSimpleMessage('Wrong!',function(){gCurrentAction = "Failed";
 	Progress.push({code:gCurrentId,success:false});	
 	localStorage.setItem("Progress",JSON.stringify(Progress));
-	$.mobile.changePage($('#one'),{transition:'fade'});
+	$.mobile.changePage($('#one'),{ transition: "fade", changeHash: false });
 	});
+    }
+}
+function ProcessAction()
+{
+
+	if(gCurrentAction == "Discovered")
+    {
+	Initialize();
+	window.setTimeout(ReadProgress,100);	
+	ShowGamePage();
+    }
+    if(gCurrentAction == "Question")
+    {
+	gActiveQuestion = GetQuestion(gCurrentId);
+	
+	$.mobile.changePage($('#questionpage'),{ transition: "fade", changeHash: false });
+	return;
     }
 }
 //Some initial config
@@ -954,10 +1041,12 @@ $(document).ready(function(){
     if(localStorage['UserName'] == null || localStorage['UserName'] == "" && $.mobile.path.parseUrl(window.location).hash != '#login' )
     {
 	jqmDialogOpen('New User Login');
-	window.setTimeout(function(){$.mobile.changePage($('#login'));},500);
+	window.setTimeout(function(){$.mobile.changePage($('#login'),{ transition: "fade", changeHash: false });},500);
 
 	return;
     }
+	
+	ProcessAction();
 
 });
 
@@ -972,6 +1061,8 @@ $("#login").live("pageinit",function (event) {InitLRSConnection();});
 $("#login").live("pageshow",function (event) {jqmDialogClose();});
 
 $('#LeaderBoard').live('pageinit', function (event) {if(LeaderboardPopulated == false) PopulateLeaderBoard();});
+
+$('#GameBoard').live('pagebeforeshow', function (event) {ProcessAction();});
 $('#GameBoard').live('pageshow', function (event) {Initialize();ReadProgress();});		 
 
 $('#togameboard').live('vmousedown',function(){
@@ -1000,7 +1091,7 @@ $('#gameboardBack').live('vmousedown',function(){
 });
 
 $('#gameboardGuess').live('vmousedown',function(){
-    $.mobile.changePage('#SubmitGuess',{transition:'slide'}); $('#gameboardGuess').addClass('ui-btn-active'); window.setTimeout(function(){$('#gameboardGuess').removeClass('ui-btn-active');},1000);
+    $.mobile.changePage('#SubmitGuess',{ transition: "slide", changeHash: false }); $('#gameboardGuess').addClass('ui-btn-active'); window.setTimeout(function(){$('#gameboardGuess').removeClass('ui-btn-active');},1000);
 });	
 
 $('#UserInfo').live('pagebeforeshow',function(){
@@ -1008,21 +1099,57 @@ $('#UserInfo').live('pagebeforeshow',function(){
     $('#currentuseremail').html(localStorage['UserEMail']);
 });   
 
-$('#one').live('pagebeforeshow',function(){
+$('#ManualEntryAnswer').live('pagebeforeshow',function(){
 
-    if(gCurrentAction == "Discovered")
-    {
-	Initialize();
-	window.setTimeout(ReadProgress,100);	
-	ShowGamePage();
-    }
-    if(gCurrentAction == "Question")
-    {
-	gActiveQuestion = GetQuestion(gCurrentId);
+	if(!localStorage['guesses'])
+		localStorage['guesses'] = '[]';
 	
-	$.mobile.changePage($('#questionpage'));
-	return;
-    }
+	var guesses = JSON.parse(localStorage['guesses']);
+	
+	if(guesses.length >= gGuessMaximum)
+	{
+		$('#SubmitAnswerOk').addClass('ui-disabled');
+		$('#SubmitAnswerOk').data('disabled',true);
+		//$('#SubmitAnswerOk').html('Submit Answer');
+		jqmSimpleMessage("Sorry, You've already had "+gGuessMaximum+" guesses.",function(){ShowGamePage();});
+	}else
+	{
+		$('#SubmitAnswerOk').removeClass('ui-disabled');
+		$('#SubmitAnswerOk').data('disabled',false);
+		//$('#SubmitAnswerOk').html('Submit Answer');
+	}
+
+
+});
+
+$('#SubmitAnswerOk').live('vmousedown',function(){
+
+	if($(this).data('disabled') == true)
+		return;
+	var answer = $('#SolvedPuzzleGuess').val().toLowerCase();
+	
+	if(!localStorage['guesses'])
+		localStorage['guesses'] = '[]';
+	
+	var guesses = JSON.parse(localStorage['guesses']);
+	guesses.push(answer);
+	localStorage['guesses'] = JSON.stringify(guesses); 
+	
+	LogSubmitGuess(answer,answer == gPuzzleAnswer.toLowerCase());
+	
+	if (answer == gPuzzleAnswer.toLowerCase())
+	{
+		$.mobile.changePage('#puzzleSolved',{ transition: "fade", changeHash: false });
+	}else
+	{
+		jqmSimpleMessage("Sorry, that's incorrect!",function(){jqmSimpleMessage("You have " + (gGuessMaximum - JSON.parse(localStorage['guesses']).length) +" guesses left!")});
+		ShowGamePage();
+	}
+});
+
+$('#one').live('pagebeforeshow',function(){
+	
+   
 });     
 $('#questionpage').live('pagebeforeshow',function(){
 
@@ -1067,34 +1194,34 @@ $('#Help').live('pagechange',function(){
 $('.footerbuttonGB').live('vmouseup',function(){
     // if(gPageLoading == true) return;
     $('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonGB').addClass('ui-btn-active');
-    $.mobile.changePage('#GameBoard',{transition:'slide'});
+    $.mobile.changePage('#GameBoard',{ transition: "slide", changeHash: true });
     gPageLoading = true;		
 });	   
 $('.footerbuttonLB').live('vmouseup',function(){
     // if(gPageLoading == true) return;
     $('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonLB').addClass('ui-btn-active');
     if($.mobile.activePage[0].id == 'GameBoard')
-	$.mobile.changePage('#LeaderBoard',{transition:'slide'});	
+	$.mobile.changePage('#LeaderBoard',{ transition: "slide", changeHash: true });	
     else
-	$.mobile.changePage('#LeaderBoard');
+	$.mobile.changePage('#LeaderBoard',{ transition: "fade", changeHash: true });
     gPageLoading = true;		
 });
 $('.footerbuttonME').live('vmouseup',function(){
     // if(gPageLoading == true) return;
     $('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonME').addClass('ui-btn-active');
     if($.mobile.activePage[0].id == 'GameBoard')
-	$.mobile.changePage('#ManualEntry',{transition:'slide'});	
+	$.mobile.changePage('#ManualEntry',{ transition: "slide", changeHash: true });	
     else
-	$.mobile.changePage('#ManualEntry');
+	$.mobile.changePage('#ManualEntry',{ transition: "fade", changeHash: true });
     gPageLoading = true;	
 });
 $('.footerbuttonA').live('vmouseup',function(){
     // if(gPageLoading == true) return;
     $('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonA').addClass('ui-btn-active');
     if($.mobile.activePage[0].id == 'GameBoard')
-	$.mobile.changePage('#Help',{transition:'slide'});	
+	$.mobile.changePage('#Help',{ transition: "slide", changeHash: true });	
     else
-	$.mobile.changePage('#Help');
+	$.mobile.changePage('#Help',{ transition: "fade", changeHash: true });
     gPageLoading = true;	
 });
 
