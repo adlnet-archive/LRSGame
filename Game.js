@@ -105,10 +105,10 @@ function Initialize()
     $('#GameBoard').trigger('create');
     
     //Setup the gameboard div with the background image
-    document.getElementById('gamebase').style.position = 'fixed';
+    document.getElementById('gamebase').style.position = 'absolute';
     document.getElementById('gamebase').style.width = '100%';
     document.getElementById('gamebase').style.height = '90%';
-    document.getElementById('gamebase').style.top = '10%';
+    document.getElementById('gamebase').style.top = '0%';
     document.getElementById('gamebase').style.left = '0%';
     document.getElementById('gamebase').style.backgroundImage = 'url(blanktile.png)';
     document.getElementById('gamebase').style.backgroundSize = (101/dim + '% ') + (101/dim + '%');
@@ -131,7 +131,15 @@ function Initialize()
 //This is called iterivly over time to reveal tiles
 function ReadProgress()
 {
-    
+	
+
+	
+	if(!Progress)
+	{
+		if(!localStorage['Progress'])
+			localStorage['Progress'] = '[]';
+		Progress = JSON.parse(localStorage['Progress']);
+	}
 
     //If there are more tiles, wait 150 milliseconds, then remove the next
     if( Count < Progress.length)
@@ -205,6 +213,9 @@ function IsValidCode(identifier)
 //True if the code is not in the list of previously discovered gCodes
 function IsNewCode(identifier)
 {
+	if(!Progress)
+		Progress = JSON.parse(localStorage.getItem("Progress"));
+
     return contains(Progress,identifier) == -1;
 }
 //Remove a tile from the gameboard, to reveal it's leter
@@ -290,16 +301,16 @@ function CreateTile(x,y,count)
     {
 	//Create the white background tile
 	var tile = document.createElement('Div');
-	tile.style.width = ((100/count) + .1) + "%";
-	tile.style.height = ((90/count)+ .1) + "%";
+	tile.style.width = ((100/count) + 0) + "%";
+	tile.style.height = ((100/count)+ 0) + "%";
 	tile.style.left = (((100/count) * y)) + "%";
-	tile.style.top = ((10+(90/count) * x)) + "%";
+	tile.style.top = (((100/count) * x)) + "%";
 	tile.style.margin = "0";
 	tile.style.padding = "0";
-	tile.style.position = 'fixed';
+	tile.style.position = 'absolute';
 	tile.style.background = 'url(whitetile.png)';
 	tile.style.backgroundSize = '100% 100%';
-	tile.style.fontSize = (window.innerHeight/dim)*.75 +'px';
+	tile.style.fontSize = (window.innerHeight/dim)*.65 +'px';
 	tile.style.color = 'black';
 	tile.style.textAlign = 'center';
 	tile.id = ("tilebacking" + x ) + y;
@@ -307,13 +318,13 @@ function CreateTile(x,y,count)
 
 	//Create the yellow covering tile
 	var tilecover = document.createElement('Img');
-	tilecover.style.width = ((100/count) + .1) + "%";
-	tilecover.style.height = ((90/count)+ .1) + "%";
+	tilecover.style.width = ((100/count) + 0) + "%";
+	tilecover.style.height = ((100/count)+ 0) + "%";
 	tilecover.style.left = (((100/count) * y)) + "%";
-	tilecover.style.top = ((10+(90/count) * x)) + "%";
+	tilecover.style.top = (((100/count) * x)) + "%";
 	tilecover.style.margin = "0";
 	tilecover.style.padding = "0";
-	tilecover.style.position = 'fixed';
+	tilecover.style.position = 'absolute';
 	tilecover.src = 'yellowtile.png';
 	tilecover.id = ("tile" + x ) + y;
 	
@@ -368,14 +379,14 @@ function InitLRSConnection()
 function ShowGamePage()
 {
     Initialize();
-    //Use the slide transition whenever going to or from the gamepage
+    //Use the none transition whenever going to or from the gamepage
     //Some phones fade werid, and show the answer
-    $.mobile.changePage($("#GameBoard"),{ transition: "slide", changeHash: true });
+    $.mobile.changePage($("#GameBoard"),{ transition: "none", changeHash: true });
 }
 //Switch to the start page
 function ShowStartPage()
 {
-    $.mobile.changePage($("#one"),{ transition: "slide", changeHash: true });	
+    $.mobile.changePage($("#one"),{ transition: "none", changeHash: true });	
 }
 
 //Get the URL without any paramerters
@@ -399,10 +410,11 @@ function ResetGame()
 	localStorage['UserName'] = ''; 
 	localStorage['Progress'] = '[]'; 
 	localStorage['guesses'] = '[]'; 
-	Progress = [];
+	Progress = null;
+	gTileCounter =0;
 	Count = 0;
 	DeInitialize();
-	$.mobile.changePage($('#login'),{ transition: "fade", changeHash: false });
+	$.mobile.changePage($('#login'),{ transition: 'none', changeHash: false });
     });
 
     },200);
@@ -931,12 +943,13 @@ function DoManualEntry()
     //Check code is valid
     if(IsValidCode(code))
     {
+		$('#manualcode').val('');
 	//Check code is new
 	if(IsNewCode(code) == true)
 	{
 	    gCurrentAction = 'Question';
 	    gCurrentId = code;
-	    $.mobile.changePage($('#questionpage'),{ transition: "fade", changeHash: false });
+	    $.mobile.changePage($('#questionpage'),{ transition: 'none', changeHash: false });
 
 	}else
 	{
@@ -995,7 +1008,7 @@ function AnswerQuestion(answer)
 	//Show them a code
 	jqmSimpleMessage('Correct!',function(){
 	    gCurrentAction = "Discovered";
-	    $.mobile.changePage($('#GameBoard'),{ transition: "slide", changeHash: false });
+	    $.mobile.changePage($('#GameBoard'),{ transition: "none", changeHash: false });
 		
 	});
     }else
@@ -1004,24 +1017,38 @@ function AnswerQuestion(answer)
 	jqmSimpleMessage('Wrong!',function(){gCurrentAction = "Failed";
 	Progress.push({code:gCurrentId,success:false});	
 	localStorage.setItem("Progress",JSON.stringify(Progress));
-	$.mobile.changePage($('#one'),{ transition: "fade", changeHash: false });
+	$.mobile.changePage($('#GameBoard'),{ transition: 'none', changeHash: false });
 	});
     }
 }
 function ProcessAction()
 {
-
+	Initialize();
+	
 	if(gCurrentAction == "Discovered")
     {
-	Initialize();
+	
 	window.setTimeout(ReadProgress,100);	
 	ShowGamePage();
+	
     }
     if(gCurrentAction == "Question")
     {
-	gActiveQuestion = GetQuestion(gCurrentId);
-	
-	$.mobile.changePage($('#questionpage'),{ transition: "fade", changeHash: false });
+	if(IsNewCode(gCurrentId) && IsValidCode(gCurrentId))
+	{
+		gActiveQuestion = GetQuestion(gCurrentId);
+		$.mobile.changePage($('#questionpage'),{ transition: 'none', changeHash: false });
+	}else
+	{
+		
+		if(IsValidCode(gCurrentId))
+			jqmSimpleMessage("You've already scanned this code");
+		else
+			jqmSimpleMessage("Invalid code!");
+		gCurrentId = '';
+		gCurrentAction ='';
+		ShowGamePage();
+	}
 	return;
     }
 }
@@ -1029,7 +1056,7 @@ function ProcessAction()
 $(document).ready(function(){
 
     jQuery.fx.interval = 100;
-
+	window.scrollTo(0,1);
     InitLRSConnection();
 
     var QueryString = parseQueryString();
@@ -1041,7 +1068,7 @@ $(document).ready(function(){
     if(localStorage['UserName'] == null || localStorage['UserName'] == "" && $.mobile.path.parseUrl(window.location).hash != '#login' )
     {
 	jqmDialogOpen('New User Login');
-	window.setTimeout(function(){$.mobile.changePage($('#login'),{ transition: "fade", changeHash: false });},500);
+	window.setTimeout(function(){$.mobile.changePage($('#login'),{ transition: 'none', changeHash: false });},500);
 
 	return;
     }
@@ -1053,17 +1080,19 @@ $(document).ready(function(){
 //*******************************************************************************************
 //jQuery Mobile event binding
 
-$(document).bind("mobileinit", function () {
 
-});
 
 $("#login").live("pageinit",function (event) {InitLRSConnection();});
 $("#login").live("pageshow",function (event) {jqmDialogClose();});
 
 $('#LeaderBoard').live('pageinit', function (event) {if(LeaderboardPopulated == false) PopulateLeaderBoard();});
+$('#LeaderBoard').live('pageshow', function (event) {window.scrollTo(0,1);$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonLB').addClass('ui-btn-active');});
+
+$('#Help').live('pageshow', function (event) {window.scrollTo(0,1);$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonA').addClass('ui-btn-active');});
+$('#ManualEntry').live('pageshow', function (event) {window.scrollTo(0,1);$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonME').addClass('ui-btn-active');});
 
 $('#GameBoard').live('pagebeforeshow', function (event) {ProcessAction();});
-$('#GameBoard').live('pageshow', function (event) {Initialize();ReadProgress();});		 
+$('#GameBoard').live('pageshow', function (event) {window.scrollTo(0,1);Initialize();ReadProgress();$('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonGB').addClass('ui-btn-active');});		 
 
 $('#togameboard').live('vmousedown',function(){
     $('#togameboard').addClass('ui-btn-active'); window.setTimeout(function(){$('#togameboard').removeClass('ui-btn-active');},1000); ShowGamePage();
@@ -1074,9 +1103,11 @@ $('#refresh').live('vmousedown',function(){
 });
 
 $('#ManualEntryOk').live('vmousedown',function(){
-    $('#ManualEntryOk').addClass('ui-btn-active'); window.setTimeout(function(){$('#ManualEntryOk').removeClass('ui-btn-active');DoManualEntry();},300); 
+    $('#ManualEntryOk').addClass('ui-btn-active'); 
 });
-
+$('#ManualEntryOk').live('vclick',function(){
+    window.setTimeout(function(){$('#ManualEntryOk').removeClass('ui-btn-active');DoManualEntry();},700); 
+});
 $('#usernameok').live('vmousedown',function(){
     $('#usernameok').addClass('ui-btn-active'); window.setTimeout(function(){$('#usernameok').removeClass('ui-btn-active');DoSetupActor()},300); ;
 });
@@ -1091,16 +1122,19 @@ $('#gameboardBack').live('vmousedown',function(){
 });
 
 $('#gameboardGuess').live('vmousedown',function(){
-    $.mobile.changePage('#SubmitGuess',{ transition: "slide", changeHash: false }); $('#gameboardGuess').addClass('ui-btn-active'); window.setTimeout(function(){$('#gameboardGuess').removeClass('ui-btn-active');},1000);
+    $.mobile.changePage('#SubmitGuess',{ transition: "none", changeHash: false }); $('#gameboardGuess').addClass('ui-btn-active'); window.setTimeout(function(){$('#gameboardGuess').removeClass('ui-btn-active');},1000);
 });	
 
 $('#UserInfo').live('pagebeforeshow',function(){
     $('#currentusername').html(localStorage['UserName']);
     $('#currentuseremail').html(localStorage['UserEMail']);
+	window.scrollTo(0,1);
 });   
 
 $('#ManualEntryAnswer').live('pagebeforeshow',function(){
 
+	window.scrollTo(0,1);
+	$('[data-role=navbar] a').removeClass("ui-btn-active"); 
 	if(!localStorage['guesses'])
 		localStorage['guesses'] = '[]';
 	
@@ -1111,7 +1145,7 @@ $('#ManualEntryAnswer').live('pagebeforeshow',function(){
 		$('#SubmitAnswerOk').addClass('ui-disabled');
 		$('#SubmitAnswerOk').data('disabled',true);
 		//$('#SubmitAnswerOk').html('Submit Answer');
-		jqmSimpleMessage("Sorry, You've already had "+gGuessMaximum+" guesses.",function(){ShowGamePage();});
+		jqmSimpleMessage("Sorry, You've already had "+gGuessMaximum+" guesses.",function(){});
 	}else
 	{
 		$('#SubmitAnswerOk').removeClass('ui-disabled');
@@ -1122,11 +1156,14 @@ $('#ManualEntryAnswer').live('pagebeforeshow',function(){
 
 });
 
-$('#SubmitAnswerOk').live('vmousedown',function(){
+$('#SubmitAnswerOk').live('vmouseup',function(){
 
 	if($(this).data('disabled') == true)
 		return;
 	var answer = $('#SolvedPuzzleGuess').val().toLowerCase();
+	
+	
+	$('#SolvedPuzzleGuess').val('');
 	
 	if(!localStorage['guesses'])
 		localStorage['guesses'] = '[]';
@@ -1139,7 +1176,7 @@ $('#SubmitAnswerOk').live('vmousedown',function(){
 	
 	if (answer == gPuzzleAnswer.toLowerCase())
 	{
-		$.mobile.changePage('#puzzleSolved',{ transition: "fade", changeHash: false });
+		$.mobile.changePage('#puzzleSolved',{ transition: 'none', changeHash: false });
 	}else
 	{
 		jqmSimpleMessage("Sorry, that's incorrect!",function(){jqmSimpleMessage("You have " + (gGuessMaximum - JSON.parse(localStorage['guesses']).length) +" guesses left!")});
@@ -1148,13 +1185,13 @@ $('#SubmitAnswerOk').live('vmousedown',function(){
 });
 
 $('#one').live('pagebeforeshow',function(){
-	
-   
+	window.scrollTo(0,1);
+   $('[data-role=navbar] a').removeClass("ui-btn-active"); 
 });     
 $('#questionpage').live('pagebeforeshow',function(){
 
     gActiveQuestion = GetQuestion(gCurrentId);
-    
+    window.scrollTo(0,1);
     $('#answer1').html("<br/>"+gActiveQuestion.answer1+"<br/><br/>");
     $('#answer2').html("<br/>"+gActiveQuestion.answer2+"<br/><br/>");
     $('#answer3').html("<br/>"+gActiveQuestion.answer3+"<br/><br/>");
@@ -1162,19 +1199,44 @@ $('#questionpage').live('pagebeforeshow',function(){
     $('#questiontext').html(gActiveQuestion.questiontext);
 });
 
+function ClearAnswerButtons()
+{
+	$('#answer1').removeClass('ui-btn-active');
+	$('#answer2').removeClass('ui-btn-active');
+	$('#answer3').removeClass('ui-btn-active');
+	$('#answer4').removeClass('ui-btn-active');
+}
+
 $('#answer1').live('vmousedown',function(){
-    AnswerQuestion(1);
+    ClearAnswerButtons();$('#answer1').addClass('ui-btn-active');
 });	
 $('#answer2').live('vmousedown',function(){
-    AnswerQuestion(2);
+    ClearAnswerButtons();$('#answer2').addClass('ui-btn-active');
 });	
 $('#answer3').live('vmousedown',function(){
-    AnswerQuestion(3);
+    ClearAnswerButtons();$('#answer3').addClass('ui-btn-active');
 });	
 $('#answer4').live('vmousedown',function(){
+   ClearAnswerButtons();$('#answer4').addClass('ui-btn-active');
+});	
+
+$('#answer1').live('vclick',function(){
+	$('#answer1').removeClass('ui-btn-active');
+    AnswerQuestion(1);
+});	
+$('#answer2').live('vclick',function(){
+	$('#answer2').removeClass('ui-btn-active');
+    AnswerQuestion(2);
+});	
+$('#answer3').live('vclick',function(){
+	$('#answer3').removeClass('ui-btn-active');
+    AnswerQuestion(3);
+});	
+$('#answer4').live('vclick',function(){
+	$('#answer4').removeClass('ui-btn-active');
     AnswerQuestion(4);
 });	
-$('#signinok').live('vmousedown',function(){
+$('#signinok').live('vclick',function(){
     $('#signinok').addClass('ui-btn-active'); window.setTimeout(function(){$('#signinok').removeClass('ui-btn-active');DoSignIn()},300); ;
 });	  
 var gPageLoading = false;		   
@@ -1194,34 +1256,34 @@ $('#Help').live('pagechange',function(){
 $('.footerbuttonGB').live('vmouseup',function(){
     // if(gPageLoading == true) return;
     $('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonGB').addClass('ui-btn-active');
-    $.mobile.changePage('#GameBoard',{ transition: "slide", changeHash: true });
+    $.mobile.changePage('#GameBoard',{ transition: "none", changeHash: true });
     gPageLoading = true;		
 });	   
 $('.footerbuttonLB').live('vmouseup',function(){
     // if(gPageLoading == true) return;
     $('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonLB').addClass('ui-btn-active');
     if($.mobile.activePage[0].id == 'GameBoard')
-	$.mobile.changePage('#LeaderBoard',{ transition: "slide", changeHash: true });	
+	$.mobile.changePage('#LeaderBoard',{ transition: "none", changeHash: true });	
     else
-	$.mobile.changePage('#LeaderBoard',{ transition: "fade", changeHash: true });
+	$.mobile.changePage('#LeaderBoard',{ transition: 'none', changeHash: true });
     gPageLoading = true;		
 });
 $('.footerbuttonME').live('vmouseup',function(){
     // if(gPageLoading == true) return;
     $('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonME').addClass('ui-btn-active');
     if($.mobile.activePage[0].id == 'GameBoard')
-	$.mobile.changePage('#ManualEntry',{ transition: "slide", changeHash: true });	
+	$.mobile.changePage('#ManualEntry',{ transition: "none", changeHash: true });	
     else
-	$.mobile.changePage('#ManualEntry',{ transition: "fade", changeHash: true });
+	$.mobile.changePage('#ManualEntry',{ transition: 'none', changeHash: true });
     gPageLoading = true;	
 });
 $('.footerbuttonA').live('vmouseup',function(){
     // if(gPageLoading == true) return;
     $('[data-role=navbar] a').removeClass("ui-btn-active"); $('.footerbuttonA').addClass('ui-btn-active');
     if($.mobile.activePage[0].id == 'GameBoard')
-	$.mobile.changePage('#Help',{ transition: "slide", changeHash: true });	
+	$.mobile.changePage('#Help',{ transition: "none", changeHash: true });	
     else
-	$.mobile.changePage('#Help',{ transition: "fade", changeHash: true });
+	$.mobile.changePage('#Help',{ transition: 'none', changeHash: true });
     gPageLoading = true;	
 });
 

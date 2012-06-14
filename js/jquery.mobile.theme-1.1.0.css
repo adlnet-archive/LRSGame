@@ -346,13 +346,13 @@
 	border: 1px solid 		#aaa /*{c-body-border}*/;
 	color: 					#333333 /*{c-body-color}*/;
 	text-shadow: 0 /*{c-body-shadow-x}*/ 1px /*{c-body-shadow-y}*/ 0 /*{c-body-shadow-radius}*/ #fff /*{c-body-shadow-color}*/;
-	background: 			#f9f9f9 /*{c-body-background-color}*/;
-	background-image: -webkit-gradient(linear, left top, left bottom, from( #f9f9f9 /*{c-body-background-start}*/), to( #eeeeee /*{c-body-background-end}*/)); /* Saf4+, Chrome */
-	background-image: -webkit-linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eeeeee /*{c-body-background-end}*/); /* Chrome 10+, Saf5.1+ */
-	background-image:    -moz-linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eeeeee /*{c-body-background-end}*/); /* FF3.6 */
-	background-image:     -ms-linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eeeeee /*{c-body-background-end}*/); /* IE10 */
-	background-image:      -o-linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eeeeee /*{c-body-background-end}*/); /* Opera 11.10+ */
-	background-image:         linear-gradient( #f9f9f9 /*{c-body-background-start}*/, #eeeeee /*{c-body-background-end}*/);
+	background: 			#f4f4f4 /*{c-body-background-color}*/;
+	background-image: -webkit-gradient(linear, left top, left bottom, from( #f4f4f4 /*{c-body-background-start}*/), to( #e0e0e0 /*{c-body-background-end}*/)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient( #f4f4f4 /*{c-body-background-start}*/, #e0e0e0 /*{c-body-background-end}*/); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient( #f4f4f4 /*{c-body-background-start}*/, #e0e0e0 /*{c-body-background-end}*/); /* FF3.6 */
+	background-image:     -ms-linear-gradient( #f4f4f4 /*{c-body-background-start}*/, #e0e0e0 /*{c-body-background-end}*/); /* IE10 */
+	background-image:      -o-linear-gradient( #f4f4f4 /*{c-body-background-start}*/, #e0e0e0 /*{c-body-background-end}*/); /* Opera 11.10+ */
+	background-image:         linear-gradient( #f4f4f4 /*{c-body-background-start}*/, #e0e0e0 /*{c-body-background-end}*/);
 }
 .ui-overlay-c {
 	background-image: none;

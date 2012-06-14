@@ -17,11 +17,19 @@
 <head>
 
 <meta name="HandheldFriendly" content="true" />
-<meta name="viewport"
-	content="width=device-width, height=device-height, user-scalable=no, initial-scale=1" />
+<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1, maximum-scale=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 
 <script type="text/javascript" src="./js/jquery.js"></script>
+
+<script>
+$(document).bind("mobileinit", function(){
+    $.mobile.defaultPageTransition = 'none';
+	$.mobile.buttonMarkup.hoverDelay = 50;
+	 $.mobile.defaultDialogTransition = 'none';
+});
+</script>
+
 <script type="text/javascript" src="./js/jquery.mobile-1.1.0.js"></script>
 <script type="text/javascript" src="./js/TCDriver.js"></script>
 <script type="text/javascript" src="./js/Base64.js"></script>
@@ -235,7 +243,7 @@
 					</ul>
 				</div>
 
-				<a id='refresh' data-role="button">Refresh</a>
+				<a id='refresh' data-role="button"  data-icon="refresh">Refresh</a>
 
 
 			</div>
@@ -284,13 +292,13 @@
 				your Actor Name. You'll have to choose a different name next time
 				you want to play, because the data will already be stored and
 				finalized.</p>
-			<div data-role="controlgroup">
+			
 
-				<a href="#UserInfo" data-role="button" data-rel='dialog'>User
-					Info</a> <a href="#resetpage" data-role="button" data-rel='dialog'>Reset</a>
+				<a href="#UserInfo" data-role="button" data-rel='dialog' data-icon='search' >User
+					Info</a> <a href="#resetpage" data-role="button" data-rel='dialog' data-icon='delete'>Reset</a>
 
 
-			</div>
+			
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
@@ -333,7 +341,7 @@
 			<div id='currentuseremail'></div>
 			<p></p>
 			<div data-role="controlgroup">
-				<a href="#Help" data-role="button">Ok</a>
+				<a href="#Help" data-role="button" data-icon='back'>Ok</a>
 			</div>
 		</div>
 
@@ -355,8 +363,8 @@
 
 			<div data-role="controlgroup">
 
-				<a id='reset' data-role="button">Confirm Reset</a> <a href="#Help"
-					data-role="button">Cancel</a>
+				<a id='reset' data-role="button" data-icon='delete'>Confirm Reset</a> <a href="#Help"
+					data-role="button" data-icon='back'>Cancel</a>
 			</div>
 		</div>
 
@@ -375,19 +383,19 @@
 
 		<div data-role="content">
 
-			<p>Please enter an email address below.</p>
-			<p>
+			<p>Please enter an email address below.<br/>
+			
 				<input type='email' placeholder="name@example.com" id='email2' />
 			</p>
 
-			<p>Please enter a password below.</p>
-			<p>
+			<p>Please enter a password below.<br/>
+			
 				<input type='password' id='password2' placeholder='password' />
 			</p>
 
 			<div data-role="controlgroup">
-				<a id='signinok' data-role="button">Ok</a> <a href="#login"
-					data-role="button">Cancel</a>
+				<a id='signinok' data-role="button" data-icon='home'>Ok</a> <a href="#login"
+					data-role="button" data-icon='back'>Cancel</a>
 			</div>
 		</div>
 
@@ -409,30 +417,30 @@
 			<p>You'll have to choose a unique name so that your data is not
 				confused with any one else's</p>
 
-			<p>Please enter a username below.</p>
+			
 
 			<div data-role="controlgroup">
-
-				<p>
+				<p>Please enter a username below.<br/>
+				
 					<input type='text' placeholder='name' id='username' />
 				</p>
 
-				<p>Please enter an email address below.</p>
-				<p>
+				<p>Please enter an email address below.<br/>
+				
 					<input type='email' placeholder="name@example.com" id='email' />
 				</p>
 
-				<p>Please enter a password below.</p>
-				<p>
+				<p>Please enter a password below.<br/>
+				
 					<input type='password' placeholder='password' id='password' />
 				</p>
 
-				<p>Please confirm the password.</p>
-				<p>
+				<p>Please confirm the password.<br/>
+				
 					<input type='password' placeholder='password' id='password1' />
 				</p>
-				<a id='usernameok' data-role="button">Ok</a> <a href="#login"
-					data-role="button">Cancel</a>
+				<a id='usernameok' data-role="button" data-icon='star'>Ok</a> <a href="#login"
+					data-role="button" data-icon='back'>Cancel</a>
 			</div>
 		</div>
 
@@ -455,8 +463,8 @@
 			<p>You'll have to choose a unique name so that your data is not
 				confused with any one else's</p>
 
-			<a href='#SignUp' data-role="button">Create Account</a> <a
-				href='#SignIn' data-role="button">Sign In</a>
+			<a href='#SignUp' data-role="button" data-icon='star'>Create Account</a> <a
+				href='#SignIn' data-role="button" data-icon='home'>Sign In</a>
 
 		</div>
 
@@ -468,7 +476,7 @@
 
 	
 
-	<div data-role="page" id="ManualEntryCode" data-theme="c">
+	<div data-role="page" id="ManualEntryCode" data-theme="c" >
 
 		<div data-role="header" data-position="fixed">
 			<h1>Manual Entry</h1>
@@ -482,14 +490,15 @@
 
 			<p>Enter the code below.</p>
 
-			<div data-role="controlgroup">
+			
 
 				<p>
 					<input type='text' placeholder='code' id='manualcode' />
 				</p>
-				<a id='ManualEntryOk' data-role="button">Ok</a>
+				<a id='ManualEntryOk' data-role="button" data-icon="check">Ok</a>
+				<a href='#ManualEntry' data-role="button" data-icon="back">Back</a>
 
-			</div>
+			
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
@@ -527,14 +536,15 @@
 			<p>Guess the answer to the puzzle. Carefull, you only get 3
 				guesses.</p>
 
-			<div data-role="controlgroup">
+			
 
 				<p>
 					<textarea rows='3' placeholder='Type the phrase here' type='text' id='SolvedPuzzleGuess' ></textarea>
 				</p>
-				<a id='SubmitAnswerOk' data-role="button">Ok</a>
+				<a id='SubmitAnswerOk' data-role="button" data-icon="check">Ok</a>
+				<a href='#ManualEntry' data-role="button" data-icon="back">Back</a>
 
-			</div>
+			
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
@@ -560,8 +570,9 @@
 		</div>
 	</div>
 
-	<div data-role="page" id="ManualEntry" data-theme="c">
+	<div data-role="page" id="ManualEntry" data-theme="c" >
 
+	
 		<div data-role="header" data-position="fixed">
 			<h1>Manual Entry</h1>
 		</div>
@@ -570,15 +581,15 @@
 
 
 
-			<div data-role="controlgroup">
+			
 				<p>If you don't have access to a camera, but wish to enter the
 					QR code manually, choose "Enter A QR Code".</p>
 				<p>If you would like to submit an answer to the puzzle, use
 					"Solve The Puzzle". Remember, you only get 3 guesses!</p>
-				<a href="#ManualEntryCode" data-role="button">Enter A QR Code</a> <a
-					href="#ManualEntryAnswer" data-role="button">Solve The Puzzle</a>
+				<a href="#ManualEntryCode" data-role="button" data-icon="check">Enter A QR Code</a> <a
+					href="#ManualEntryAnswer" data-role="button" data-icon="check">Solve The Puzzle</a>
 
-			</div>
+			
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
@@ -602,14 +613,16 @@
 			</div>
 
 		</div>
+		
 	</div>
 
 
 
 	<div data-role="page" id="GameBoard" data-url="#GameBoard">
-		<div data-role="content" data-theme="b" style='height:100px'>
-			<a data-role='button' 
+		<a data-role='button' 
 						href='#ManualEntryAnswer' style='position:absolute;left:5%;width:90%;top:1%;height:8%;margin:0'>Solve the Puzzle</a>
+		<div data-role="content" data-theme="b" style='height:84%;width:92%;top:10%;position:absolute;overflow:hidden'>
+			
 			<div id='gamebase'></div>
 
 		</div>
