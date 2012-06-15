@@ -109,6 +109,8 @@ function XHR_request(lrs, url, method, data, auth, callback, ignore404, extraHea
             } else {
                 try {
                 	alert("There was a problem communicating with the Learning Record Store. (" + xhr.status + " | " + xhr.responseText+ ")" + xhr.url);
+					$('#popup').stop();
+					$('#popup').remove();
                 } catch (ex) {alert (ex.toString());}
                 //throw new Error("debugger");
                 return xhr;

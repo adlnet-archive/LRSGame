@@ -17,8 +17,9 @@
 <head>
 
 <meta name="HandheldFriendly" content="true" />
-<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
 
 <script type="text/javascript" src="./js/jquery.js"></script>
 
@@ -132,27 +133,28 @@ $(document).bind("mobileinit", function(){
 			<div data-role="controlgroup">
 				<a id='togameboard' data-role="button">Show Game Board</a> <a
 					id='toLeaderBoard' href="#LeaderBoard" data-role="button">Show
-					Leader Board</a> <a href="#ManualEntry" data-role="button">Enter
+					Leaderboard</a> <a href="#ManualEntry" data-role="button">Enter
 					Code</a> <a href="#Help" data-role="button">About</a>
 			</div>
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
-			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+			class="ui-bar ui-footer" style="padding:0px 0px 0px 0px" data-id="foo1">
 
-			<div style="padding-bottom: 3px" data-role='navbar'>
+				<div style="padding:0px 0px 0px 0px" data-role='navbar'>
 				<ul>
-					<li><a data-role='button' data-icon='grid'
-						class='footerbuttonGB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonGB'><img src='40-dialpad.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Gameboard</p></a>
 					</li>
-					<li><a data-role='button' data-icon='star'
-						class='footerbuttonLB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonME'><img src='187-pencil.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Manual Entry</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='gear'
-						class='footerbuttonME'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonLB'><img src='85-trophy.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Leaderboard</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='search'
-						class='footerbuttonA'></a>
+					
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonA'><img src='20-gear-2.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>About</p></a>
 					</li>
 				</ul>
 			</div>
@@ -229,7 +231,7 @@ $(document).bind("mobileinit", function(){
 	<div data-role="page" id="LeaderBoard" data-theme="c">
 
 		<div data-role="header" data-position="fixed">
-			<h1>Leader Board</h1>
+			<h1>Leaderboard</h1>
 		</div>
 
 		<div data-role="content">
@@ -237,10 +239,10 @@ $(document).bind("mobileinit", function(){
 
 			<div data-role="controlgroup">
 				<div>
-					<ul id='lboard' data-role="listview" data-inset="true">
+					<div id='lboard' data-role="collapsible-set" data-inset="true">
 
 
-					</ul>
+					</div>
 				</div>
 
 				<a id='refresh' data-role="button"  data-icon="refresh">Refresh</a>
@@ -250,21 +252,22 @@ $(document).bind("mobileinit", function(){
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
-			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+			class="ui-bar ui-footer" style="padding:0px 0px 0px 0px" data-id="foo1">
 
-			<div style="padding-bottom: 3px" data-role='navbar'>
+				<div style="padding:0px 0px 0px 0px" data-role='navbar'>
 				<ul>
-					<li><a data-role='button' data-icon='grid'
-						class='footerbuttonGB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonGB'><img src='40-dialpad.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Gameboard</p></a>
 					</li>
-					<li><a data-role='button' data-icon='star'
-						class='footerbuttonLB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonME'><img src='187-pencil.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Manual Entry</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='gear'
-						class='footerbuttonME'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonLB'><img src='85-trophy.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Leaderboard</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='search'
-						class='footerbuttonA'></a>
+					
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonA'><img src='20-gear-2.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>About</p></a>
 					</li>
 				</ul>
 			</div>
@@ -302,21 +305,22 @@ $(document).bind("mobileinit", function(){
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
-			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+			class="ui-bar ui-footer" style="padding:0px 0px 0px 0px" data-id="foo1">
 
-			<div style="padding-bottom: 3px" data-role='navbar'>
+				<div style="padding:0px 0px 0px 0px" data-role='navbar'>
 				<ul>
-					<li><a data-role='button' data-icon='grid'
-						class='footerbuttonGB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonGB'><img src='40-dialpad.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Gameboard</p></a>
 					</li>
-					<li><a data-role='button' data-icon='star'
-						class='footerbuttonLB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonME'><img src='187-pencil.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Manual Entry</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='gear'
-						class='footerbuttonME'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonLB'><img src='85-trophy.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Leaderboard</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='search'
-						class='footerbuttonA'></a>
+					
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonA'><img src='20-gear-2.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>About</p></a>
 					</li>
 				</ul>
 			</div>
@@ -393,10 +397,10 @@ $(document).bind("mobileinit", function(){
 				<input type='password' id='password2' placeholder='password' />
 			</p>
 
-			<div data-role="controlgroup">
-				<a id='signinok' data-role="button" data-icon='home'>Ok</a> <a href="#login"
+			
+				<a id='signinok' data-role="button" data-icon='check'>Ok</a> <a href="#login"
 					data-role="button" data-icon='back'>Cancel</a>
-			</div>
+			
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed">
@@ -419,7 +423,7 @@ $(document).bind("mobileinit", function(){
 
 			
 
-			<div data-role="controlgroup">
+			
 				<p>Please enter a username below.<br/>
 				
 					<input type='text' placeholder='name' id='username' />
@@ -439,9 +443,9 @@ $(document).bind("mobileinit", function(){
 				
 					<input type='password' placeholder='password' id='password1' />
 				</p>
-				<a id='usernameok' data-role="button" data-icon='star'>Ok</a> <a href="#login"
+				<a id='usernameok' data-role="button" data-icon='check'>Ok</a> <a href="#login"
 					data-role="button" data-icon='back'>Cancel</a>
-			</div>
+			
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed">
@@ -502,21 +506,22 @@ $(document).bind("mobileinit", function(){
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
-			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+			class="ui-bar ui-footer" style="padding:0px 0px 0px 0px" data-id="foo1">
 
-			<div style="padding-bottom: 3px" data-role='navbar'>
+				<div style="padding:0px 0px 0px 0px" data-role='navbar'>
 				<ul>
-					<li><a data-role='button' data-icon='grid'
-						class='footerbuttonGB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonGB'><img src='40-dialpad.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Gameboard</p></a>
 					</li>
-					<li><a data-role='button' data-icon='star'
-						class='footerbuttonLB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonME'><img src='187-pencil.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Manual Entry</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='gear'
-						class='footerbuttonME'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonLB'><img src='85-trophy.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Leaderboard</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='search'
-						class='footerbuttonA'></a>
+					
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonA'><img src='20-gear-2.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>About</p></a>
 					</li>
 				</ul>
 			</div>
@@ -533,7 +538,7 @@ $(document).bind("mobileinit", function(){
 		<div data-role="content" >
 
 
-			<p>Guess the answer to the puzzle. Carefull, you only get 3
+			<p id='AnswerScreenText'>Guess the answer to the puzzle. Carefull, you only get 5
 				guesses.</p>
 
 			
@@ -548,21 +553,22 @@ $(document).bind("mobileinit", function(){
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
-			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+			class="ui-bar ui-footer" style="padding:0px 0px 0px 0px" data-id="foo1">
 
-			<div style="padding-bottom: 3px" data-role='navbar'>
+				<div style="padding:0px 0px 0px 0px" data-role='navbar'>
 				<ul>
-					<li><a data-role='button' data-icon='grid'
-						class='footerbuttonGB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonGB'><img src='40-dialpad.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Gameboard</p></a>
 					</li>
-					<li><a data-role='button' data-icon='star'
-						class='footerbuttonLB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonME'><img src='187-pencil.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Manual Entry</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='gear'
-						class='footerbuttonME'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonLB'><img src='85-trophy.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Leaderboard</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='search'
-						class='footerbuttonA'></a>
+					
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonA'><img src='20-gear-2.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>About</p></a>
 					</li>
 				</ul>
 			</div>
@@ -593,21 +599,22 @@ $(document).bind("mobileinit", function(){
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
-			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+			class="ui-bar ui-footer" style="padding:0px 0px 0px 0px" data-id="foo1">
 
-			<div style="padding-bottom: 3px" data-role='navbar'>
+				<div style="padding:0px 0px 0px 0px" data-role='navbar'>
 				<ul>
-					<li><a data-role='button' data-icon='grid'
-						class='footerbuttonGB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonGB'><img src='40-dialpad.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Gameboard</p></a>
 					</li>
-					<li><a data-role='button' data-icon='star'
-						class='footerbuttonLB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonME'><img src='187-pencil.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Manual Entry</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='gear'
-						class='footerbuttonME'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonLB'><img src='85-trophy.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Leaderboard</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='search'
-						class='footerbuttonA'></a>
+					
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonA'><img src='20-gear-2.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>About</p></a>
 					</li>
 				</ul>
 			</div>
@@ -618,31 +625,32 @@ $(document).bind("mobileinit", function(){
 
 
 
-	<div data-role="page" id="GameBoard" data-url="#GameBoard">
+	<div data-role="page" id="GameBoard" data-url="#GameBoard" style='overflow:hidden'>
 		<a data-role='button' 
 						href='#ManualEntryAnswer' style='position:absolute;left:5%;width:90%;top:1%;height:8%;margin:0'>Solve the Puzzle</a>
-		<div data-role="content" data-theme="b" style='height:84%;width:92%;top:10%;position:absolute;overflow:hidden'>
+		<div  style='overflow:hidden;height:100%;width:100%;top:10%;position:absolute;overflow:hidden'>
 			
-			<div id='gamebase'></div>
+			<div id='gamebase' style='overflow:hidden'></div>
 
 		</div>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
-			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+			class="ui-bar ui-footer" style="padding:0px 0px 0px 0px" data-id="foo1">
 
-			<div style="padding-bottom: 3px" data-role='navbar'>
+				<div style="padding:0px 0px 0px 0px" data-role='navbar'>
 				<ul>
-					<li><a data-role='button' data-icon='grid'
-						class='footerbuttonGB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonGB'><img src='40-dialpad.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Gameboard</p></a>
 					</li>
-					<li><a data-role='button' data-icon='star'
-						class='footerbuttonLB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonME'><img src='187-pencil.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Manual Entry</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='gear'
-						class='footerbuttonME'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonLB'><img src='85-trophy.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Leaderboard</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='search'
-						class='footerbuttonA'></a>
+					
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonA'><img src='20-gear-2.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>About</p></a>
 					</li>
 				</ul>
 			</div>
@@ -659,22 +667,22 @@ $(document).bind("mobileinit", function(){
 		<img src='fireworksanimation-13.gif' style='width:100%' />
 		<h3>Congratulations. You've successfully solved the puzzle. Your name will be entered to win one of the prizes at the end of the conference!</h3>
 		<div data-role="footer" data-theme="d" data-position="fixed"
-		
-			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
-		 
-			<div style="padding-bottom: 3px" data-role='navbar'>
+			class="ui-bar ui-footer" style="padding:0px 0px 0px 0px" data-id="foo1">
+
+				<div style="padding:0px 0px 0px 0px" data-role='navbar'>
 				<ul>
-					<li><a data-role='button' data-icon='grid'
-						class='footerbuttonGB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonGB'><img src='40-dialpad.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Gameboard</p></a>
 					</li>
-					<li><a data-role='button' data-icon='star'
-						class='footerbuttonLB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonME'><img src='187-pencil.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Manual Entry</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='gear'
-						class='footerbuttonME'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonLB'><img src='85-trophy.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Leaderboard</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='search'
-						class='footerbuttonA'></a>
+					
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonA'><img src='20-gear-2.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>About</p></a>
 					</li>
 				</ul>
 			</div>
@@ -692,21 +700,22 @@ $(document).bind("mobileinit", function(){
 		</ul>
 
 		<div data-role="footer" data-theme="d" data-position="fixed"
-			class="ui-bar ui-footer" style="padding-left: 1px" data-id="foo1">
+			class="ui-bar ui-footer" style="padding:0px 0px 0px 0px" data-id="foo1">
 
-			<div style="padding-bottom: 3px" data-role='navbar'>
+				<div style="padding:0px 0px 0px 0px" data-role='navbar'>
 				<ul>
-					<li><a data-role='button' data-icon='grid'
-						class='footerbuttonGB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonGB'><img src='40-dialpad.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Gameboard</p></a>
 					</li>
-					<li><a data-role='button' data-icon='star'
-						class='footerbuttonLB'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonME'><img src='187-pencil.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Manual Entry</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='gear'
-						class='footerbuttonME'></a>
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonLB'><img src='85-trophy.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>Leaderboard</p></a></a>
 					</li>
-					<li><a data-role='button' data-icon='search'
-						class='footerbuttonA'></a>
+					
+					<li><a style='text-align:center;padding:0px 0px 0px 0px;margin:-5px 0px -5px 0px;border:1px solid darkgrey'
+						class='footerbuttonA'><img src='20-gear-2.png'/><p style='margin:0px 0px -5px 0px;font-size:.8em'>About</p></a>
 					</li>
 				</ul>
 			</div>
