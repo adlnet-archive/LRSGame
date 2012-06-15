@@ -119,6 +119,7 @@ function Initialize()
 	for(var j =0; j < dim; j++)
 	    CreateTile(i,j,dim,gOrder[(i*dim)+j]);
     
+	
     //If local storage "Progress is blank, make it empty array
     if(!localStorage.getItem("Progress"))
 	localStorage.setItem("Progress",JSON.stringify([]));
@@ -301,6 +302,7 @@ function CreateTile(x,y,count)
     {
 	//Create the white background tile
 	var tile = document.createElement('Div');
+	tile.className = 'LetterTile';
 	tile.style.width = ((100/count) + 0) + "%";
 	tile.style.height = ((100/count)+ 0) + "%";
 	tile.style.left = (((100/count) * y)) + "%";
@@ -310,13 +312,15 @@ function CreateTile(x,y,count)
 	tile.style.position = 'absolute';
 	tile.style.background = 'url(whitetile.png)';
 	tile.style.backgroundSize = '100% 100%';
-	tile.style.fontSize = (window.innerHeight/dim)*.035 +'em';
+	
 	tile.style.color = 'black';
 	tile.style.textAlign = 'center';
 	tile.style.overflow = 'hidden';
 	tile.id = ("tilebacking" + x ) + y;
 	document.getElementById('gamebase').appendChild(tile);
-
+	$(tile).fitText(.15);
+	$(tile).fitText(.15);
+	tile.style.fontSize = (window.innerHeight * .005)+"em";;
 	//Create the yellow covering tile
 	var tilecover = document.createElement('Img');
 	tilecover.style.width = ((100/count) + 0) + "%";
@@ -332,7 +336,7 @@ function CreateTile(x,y,count)
 	//Only set the letter for the background tile when the covering is in place
 	//The prevents a flash that shows the entire message on some phones
 	tilecover.onload = function(){
-	    tile.innerHTML = tilestate;
+	    tile.innerHTML = ""+tilestate+"";
 	}
 	
 	tilecover.OrderNumber = gTileCounter;
@@ -341,9 +345,10 @@ function CreateTile(x,y,count)
 	document.getElementById('gamebase').appendChild(tilecover);
 	
 	//Debug only function to show tile's code.
-	$(tilecover).click(function(){
+	$(tilecover).click(function(event){
 	    //if(!tilecover.removed)
 		//ShowVendorData(tilecover.OrderNumber);
+		event.stopPropagation();
 		return null;
 	});
     }
@@ -817,6 +822,10 @@ var LeaderboardPopulated = false;
 //Callback from AJAX after getting all the events from the LRS
 function PopulateLeaderBoardCallback(e)
 {
+	if(!e)
+	{ return;
+	}
+	
     // jQuery needs to refresh the styles on the control
     $('#lboard').collapsibleset('refresh');
     var counts = [];

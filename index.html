@@ -17,12 +17,12 @@
 <head>
 
 <meta name="HandheldFriendly" content="true" />
-<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+<meta name="viewport" content="width=device-width; height=device-height; user-scalable=0; initial-scale=1; maximum-scale=1, minimum-scale=1;" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta content="yes" name="apple-mobile-web-app-capable" />
 
 <script type="text/javascript" src="./js/jquery.js"></script>
-
+<script type="text/javascript" src="./js/jquery.fittext.js"></script>
 <script>
 $(document).bind("mobileinit", function(){
     $.mobile.defaultPageTransition = 'none';
@@ -627,8 +627,8 @@ $(document).bind("mobileinit", function(){
 
 	<div data-role="page" id="GameBoard" data-url="#GameBoard" style='overflow:hidden'>
 		<a data-role='button' 
-						href='#ManualEntryAnswer' style='position:absolute;left:5%;width:90%;top:1%;height:8%;margin:0'>Solve the Puzzle</a>
-		<div  style='overflow:hidden;height:100%;width:100%;top:10%;position:absolute;overflow:hidden'>
+						href='#ManualEntryAnswer' style='left:5%;width:90%;top:1%;height:8%;margin:0;min-height:2em;margin:.4em'>Solve the Puzzle</a>
+		<div  style='overflow:hidden;height:100%;width:100%;position:absolute;overflow:hidden'>
 			
 			<div id='gamebase' style='overflow:hidden'></div>
 

@@ -87,7 +87,7 @@ function XHR_request(lrs, url, method, data, auth, callback, ignore404, extraHea
         ieXDomain = true;
         ieModeRequest = TCDriver_GetIEModeRequest(method, url, headers, data);
         xhr = new XDomainRequest();
-        console.log(ieModeRequest.method + ", " + ieModeRequest.url);
+        TCDriver_Log(ieModeRequest.method + ", " + ieModeRequest.url);
         xhr.open(ieModeRequest.method, ieModeRequest.url);
     }
     
@@ -109,8 +109,8 @@ function XHR_request(lrs, url, method, data, auth, callback, ignore404, extraHea
             } else {
                 try {
                 	alert("There was a problem communicating with the Learning Record Store. (" + xhr.status + " | " + xhr.responseText+ ")" + xhr.url);
-					$('#popup').stop();
-					$('#popup').remove();
+					window.setTimeout(function(){$('#popup').stop();
+					$('#popup').remove();},300);
                 } catch (ex) {alert (ex.toString());}
                 //throw new Error("debugger");
                 return xhr;
@@ -146,7 +146,7 @@ function XHR_request(lrs, url, method, data, auth, callback, ignore404, extraHea
 
 
 function TCDriver_Log(str){
-    if(console !== undefined){
+    if(console !== undefined && console.log){
         console.log(str);
     }
 }
