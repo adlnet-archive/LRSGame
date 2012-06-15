@@ -345,7 +345,7 @@ function CreateTile(x,y,count)
 	    //if(!tilecover.removed)
 		//ShowVendorData(tilecover.OrderNumber);
 		return null;
-//	});
+	});
     }
 }
 
