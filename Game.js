@@ -318,8 +318,8 @@ function CreateTile(x,y,count)
 	tile.style.overflow = 'hidden';
 	tile.id = ("tilebacking" + x ) + y;
 	document.getElementById('gamebase').appendChild(tile);
-	$(tile).fitText(.15);
-	$(tile).fitText(.15);
+	$(tile).fitText(.15,{ minFontSize: '20px', maxFontSize: '240px' });
+	
 	tile.style.fontSize = (window.innerHeight * .005)+"em";;
 	//Create the yellow covering tile
 	var tilecover = document.createElement('Img');
@@ -343,12 +343,13 @@ function CreateTile(x,y,count)
 	gTileCounter++;
 	tilecover.removed = false;
 	document.getElementById('gamebase').appendChild(tilecover);
-	
+	var that 
 	//Debug only function to show tile's code.
 	$(tilecover).click(function(event){
 	    //if(!tilecover.removed)
 		//ShowVendorData(tilecover.OrderNumber);
-		event.stopPropagation();
+		if(document.getElementById(tilecover.id).removed == false)
+			jqmSimpleMessage("Find Codes To Reveal!");
 		return null;
 	});
     }
@@ -664,9 +665,9 @@ function jqmDialogClose(){
 function jqmDialogOpen(message) {
     $('#popup').stop();
     $('#popup').remove();
-    $("<div id='popup' style = 'border-width:2px; border-color:black; border-style:solid;height:70%;top:15%;width:80%;left:10%;text-align:center;vertical-align:center;position:fixed' class='ui-loader ui-overlay-shadow ui-body-c ui-corner-all'><h1 style='top:50%;left:0%;height:10em;margin-top:-5em;width:100%;position:absolute;margin-top:auto;margin-bottom:auto;line-height:100%'>" + message + "</br><img src='ajax-loader.gif'></h1></img></div>")
+    $("<div id='popup' style = 'display:table;border-width:2px; border-color:black; border-style:solid;height:70%;top:15%;width:80%;left:10%;text-align:center;vertical-align:center;position:fixed' class='ui-loader ui-overlay-shadow ui-body-c ui-corner-all'><h1 style='display:table-cell;width:100%;vertical-align:middle;margin-top:auto;margin-bottom:auto;line-height:100%'>" + message + "</br><img src='ajax-loader.gif'></h1></img></div>")
     .css({
-	display: "block",
+	display: "table",
 	opacity: 0.96
     })
     .appendTo("body");
@@ -675,9 +676,9 @@ function jqmDialogOpen(message) {
 function jqmSimpleMessage(message,callback) {
     $('#popup').stop();
     $('#popup').remove();
-    $("<div id='popup' style = 'border-width:2px; border-color:black; border-style:solid;height:70%;top:15%;width:80%;left:10%;text-align:center;vertical-align:center;position:fixed' class='ui-loader ui-overlay-shadow ui-body-c ui-corner-all'><h1 style='top:50%;left:0%;height:10em;margin-top:-5em;width:100%;position:absolute;margin-top:auto;margin-bottom:auto;line-height:100%'>" + message + "</h1></div>")
+    $("<div id='popup' style = 'display:table;border-width:2px; border-color:black; border-style:solid;height:70%;top:15%;width:80%;left:10%;text-align:center;vertical-align:center;position:fixed' class='ui-loader ui-overlay-shadow ui-body-c ui-corner-all'><h1 style='display:table-cell;width:100%;vertical-align:middle;margin-top:auto;margin-bottom:auto;line-height:100%'>" + message + "</h1></img></div>")
     .css({
-	display: "block",
+	display: "table",
 	opacity: 0.96
 
     })
