@@ -591,9 +591,9 @@ function DoSetupActor()
 {
     jqmDialogOpen("Creating Profile");
     InitLRSConnection();
-    gTempUsername = $("#username").val();
-    gEmailCheck = $("#email").val();
-    gPassword = $("#password").val();
+    gTempUsername = $.trim($("#username").val());
+    gEmailCheck = $.trim($("#email").val());
+    gPassword = $.trim($("#password").val());
 
 	var profane = false;
 	
@@ -616,7 +616,7 @@ function DoSetupActor()
 		return;
 	}
     //Check matching passwords 
-    if($("#password").val() != $("#password1").val())
+    if($.trim($("#password").val()) != $.trim($("#password1").val()))
     {
 	jqmSimpleMessage("Passwords must match", function(){});
 	return;
@@ -639,8 +639,8 @@ function DoSignIn()
     jqmDialogOpen("Signing In");
     InitLRSConnection();
 
-    gEmailCheck = $("#email2").val();
-    gPassword = $("#password2").val();
+    gEmailCheck = $.trim($("#email2").val());
+    gPassword = $.trim($("#password2").val());
 
     //Check for valid email 
     if(!validateEmail(gEmailCheck,1,0))
@@ -650,9 +650,9 @@ function DoSignIn()
     }
 
     //Get the profiles, with the correct callback to check for password
-    if(!gProfiles)
+   // if(!gProfiles)
 	TCDriver_GetStatements(tc_lrs,null,'imported',null,ProfilesReceivedSignIn);
-    ProfilesReceivedSignIn();
+   // ProfilesReceivedSignIn();
 
 }	
 
@@ -1014,7 +1014,7 @@ function PopulateLeaderBoard()
 function DoManualEntry()
 {
     //The code to test
-    var code = $('#manualcode').val().toLowerCase();
+    var code = $.trim($('#manualcode').val().toLowerCase());
     Initialize();
     
     //Check code is valid
@@ -1315,7 +1315,7 @@ $('#SubmitAnswerOk').live('vmouseup',function(){
 
 	if($(this).data('disabled') == true)
 		return;
-	var answer = $('#SolvedPuzzleGuess').val().toLowerCase();
+	var answer = $.trim($('#SolvedPuzzleGuess').val().toLowerCase());
 	
 	
 	$('#SolvedPuzzleGuess').val('');
