@@ -61,6 +61,7 @@ function XHR_request(lrs, url, method, data, auth, callback, ignore404, extraHea
     var headers = {};
     headers["Content-Type"] = "application/json";
     headers["Authorization"] = auth;
+    headers['X-Experience-API-Version'] = '1.0.0';
     if(extraHeaders !== null){
         for(var headerName in extraHeaders){
             headers[headerName] = extraHeaders[headerName];
@@ -146,9 +147,11 @@ function XHR_request(lrs, url, method, data, auth, callback, ignore404, extraHea
 
 
 function TCDriver_Log(str){
-    if(console !== undefined && console.log){
-        console.log(str);
-    }
+   try{
+    console.log(str);
+   }catch(ex){
+    //ignore exception on logging
+   }
 }
 
 function TCDriver_GetIEModeRequest(method, url, headers, data){
@@ -239,7 +242,7 @@ function _TCDriver_PrepareStatement(lrs, stmt) {
 function TCDriver_SendStatement (lrs, stmt, callback) {
     if (lrs.endpoint != undefined && lrs.endpoint != "" && lrs.auth != undefined && lrs.auth != ""){
 		_TCDriver_PrepareStatement(lrs, stmt);
-        XHR_request(lrs, lrs.endpoint+"statements/?statementId="+_ruuid(), "PUT", JSON.stringify(stmt), lrs.auth, callback);
+        XHR_request(lrs, lrs.endpoint+"xapi/statements/?statementId="+_ruuid(), "PUT", JSON.stringify(stmt), lrs.auth, callback);
     }
 }
 
@@ -250,7 +253,7 @@ function TCDriver_SendMultiStatements (lrs, stmtArray, callback) {
             var stmt = stmtArray[i];
 			_TCDriver_PrepareStatement(lrs, stmt);
         }
-        XHR_request(lrs,lrs.endpoint+"statements/", "POST", JSON.stringify(stmtArray), lrs.auth, callback);
+        XHR_request(lrs,lrs.endpoint+"xapi/statements/", "POST", JSON.stringify(stmtArray), lrs.auth, callback);
     }
 }
 
@@ -258,7 +261,7 @@ function TCDriver_SendMultiStatements (lrs, stmtArray, callback) {
 // Synchronous if callback is not provided (not recommended)
 function TCDriver_SetState (lrs, activityId, stateKey, stateVal, callback) {
     if (lrs.endpoint != undefined && lrs.endpoint != "" && lrs.auth != undefined && lrs.auth != ""){
-        var url = lrs.endpoint + "activities/state?activityId=<activity ID>&actor=<actor>&stateId=<statekey>";
+        var url = lrs.endpoint + "xapi/activities/state?activityId=<activity ID>&actor=<actor>&stateId=<statekey>";
         
         url = url.replace('<activity ID>',encodeURIComponent(activityId));
         url = url.replace('<actor>',encodeURIComponent(lrs.actor));
@@ -274,7 +277,7 @@ function TCDriver_SetState (lrs, activityId, stateKey, stateVal, callback) {
 // Synchronous if callback is not provided (not recommended)
 function TCDriver_GetState (lrs, activityId, stateKey, callback) {
     if (lrs.endpoint != undefined && lrs.endpoint != "" && lrs.auth != undefined && lrs.auth != ""){
-        var url = lrs.endpoint + "activities/state?activityId=<activity ID>&actor=<actor>&stateId=<statekey>";
+        var url = lrs.endpoint + "xapi/activities/state?activityId=<activity ID>&actor=<actor>&stateId=<statekey>";
         
         url = url.replace('<activity ID>',encodeURIComponent(activityId));
         url = url.replace('<actor>',encodeURIComponent(lrs.actor));
@@ -292,7 +295,7 @@ function TCDriver_GetState (lrs, activityId, stateKey, callback) {
 function TCDriver_SendActivityProfile (lrs, activityId, profileKey, profileStr, lastSha1Hash, callback) {
     
     if (lrs.endpoint != undefined && lrs.endpoint != "" && lrs.auth != undefined && lrs.auth != ""){
-        var url = lrs.endpoint + "activities/profile?activityId=<activity ID>&profileId=<profilekey>";
+        var url = lrs.endpoint + "xapi/activities/profile?activityId=<activity ID>&profileId=<profilekey>";
         
         url = url.replace('<activity ID>',encodeURIComponent(activityId));
         url = url.replace('<profilekey>',encodeURIComponent(profileKey));
@@ -309,7 +312,7 @@ function TCDriver_SendActivityProfile (lrs, activityId, profileKey, profileStr, 
 function TCDriver_GetActivityProfile (lrs, activityId, profileKey, callback) {
     
     if (lrs.endpoint != undefined && lrs.endpoint != "" && lrs.auth != undefined && lrs.auth != ""){
-        var url = lrs.endpoint + "activities/profile?activityId=<activity ID>&profileId=<profilekey>";
+        var url = lrs.endpoint + "xapi/activities/profile?activityId=<activity ID>&profileId=<profilekey>";
         
         url = url.replace('<activity ID>',encodeURIComponent(activityId));
         url = url.replace('<profilekey>',encodeURIComponent(profileKey));
@@ -323,13 +326,13 @@ function TCDriver_GetActivityProfile (lrs, activityId, profileKey, callback) {
 function TCDriver_GetStatements (lrs,sendActor,verb,activityId, callback) {
     if (lrs.endpoint != undefined && lrs.endpoint != "" && lrs.auth != undefined && lrs.auth != ""){
         
-        var url = lrs.endpoint + "statements/?sparse=false";
+        var url = lrs.endpoint + "xapi/statements/?format=exact";
         if (sendActor){
             url += "&actor=" + encodeURIComponent(lrs.actor);
         }
         
         if (verb != null){
-            url += "&verb=" + verb;
+            url += "&verb=" + encodeURIComponent(verb);
         }
         if (activityId != null){
             var obj = {id:activityId};
@@ -344,7 +347,7 @@ function TCDriver_GetStatements (lrs,sendActor,verb,activityId, callback) {
         if(lrs.until){
             url += '&until=' + TCDriver_ISODateString(lrs.until);
         }
-		
+        // added to try to get all statements		
         var res = XHR_request(lrs,url, "GET", null, lrs.auth, callback);
 		if(res)
         return res.responseText;
@@ -352,7 +355,22 @@ function TCDriver_GetStatements (lrs,sendActor,verb,activityId, callback) {
 		return "";
     }
 }
-
+// Synchronous if callback is not provided (not recommended)
+function TCDriver_GetStatementsResume (lrs,more, callback) {
+    if (lrs.endpoint != undefined && lrs.endpoint != "" && lrs.auth != undefined && lrs.auth != ""){
+        
+        var url = lrs.endpoint + "xapi/statements/";
+        if (more){
+            url = lrs.endpoint + more;
+        }
+        // added to try to get all statements       
+        var res = XHR_request(lrs,url, "GET", null, lrs.auth, callback);
+        if(res)
+        return res.responseText;
+        else
+        return "";
+    }
+}
 
 
 
