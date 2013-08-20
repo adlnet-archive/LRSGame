@@ -55,34 +55,6 @@ var specialCodes = [{code:'start',type:'extra point',points:1},
 // Holds all the questions
 var gQuestions;
 
-var registered_verb = {
-    "id":"http://adlnet.gov/xapi/verbs/registered",
-    "display":{
-        "en-US":"registered"
-    }
-}
-
-var attempted_verb = {
-    "id":"http://adlnet.gov/xapi/verbs/attempted",
-    "display":{
-        "en-US":"attempted"
-    }
-}
-
-var completed_verb = {
-    "id":"http://adlnet.gov/xapi/verbs/completed",
-    "display":{
-        "en-US":"completed"
-    }
-}
-
-var answered_verb = {
-    "id":"http://adlnet.gov/xapi/verbs/answered",
-    "display":{
-        "en-US":"answered"
-    }
-}
-
 //Get a questiong by ID, and init the questions if not inited   
 function GetQuestion(id)
 {
@@ -571,7 +543,7 @@ function ProfilesReceivedSignIn(e)
 function GetProfiles()
 {
     // if(!gProfiles)
-    TCDriver_GetStatements(tc_lrs,null,registered_verb.id,null,ProfilesReceivedSignUp);
+    TCDriver_GetStatements(tc_lrs,null,ADL.verbs.registered.id,null,ProfilesReceivedSignUp);
     // ProfilesReceivedSignUp();
 }
 
@@ -683,7 +655,7 @@ function DoSignIn()
 
     //Get the profiles, with the correct callback to check for password
    // if(!gProfiles)
-    TCDriver_GetStatements(tc_lrs,null,registered_verb.id,null,ProfilesReceivedSignIn);
+    TCDriver_GetStatements(tc_lrs,null,ADL.verbs.registered.id,null,ProfilesReceivedSignIn);
    // ProfilesReceivedSignIn();
 
 }   
@@ -738,7 +710,7 @@ function LogSubmitGuess(answer,correct)
 
     var result = {success:correct,completion : true};
     var stmt = {
-        "verb":completed_verb, 
+        "verb":ADL.verbs.completed, 
         "object":tcCourseObj,
         "actor":{ "mbox":"mailto:" + localStorage["UserEmail"], "name":localStorage["UserName"] },
         "result":result
@@ -765,7 +737,7 @@ function LogAttempt(email,name,id,callback)
         }
     };
     var stmt = {
-        "verb":attempted_verb,
+        "verb":ADL.verbs.attempted,
         "object":tcCourseObj,
         "actor":{ "mbox":"mailto:" + email, "name":name },
         "context": contextObj
@@ -789,7 +761,7 @@ function LogQuestion(name,email,Question,answer,callback)
 
     var result = {success:(answer === Question.correctAnswer),completion : true};
     var stmt = {
-        "verb":answered_verb,
+        "verb":ADL.verbs.answered,
         "object":obj,
         "actor":{ "mbox":"mailto:" + email, "name":name },
         "result":result
@@ -815,7 +787,7 @@ function CreateProfile(email,name, password,callback)
         }
     };
     var stmt = {
-        "verb":registered_verb,
+        "verb":ADL.verbs.registered,
         "object":tcCourseObj,
         "actor":{ "mbox":"mailto:" + email, "name":name },
         "context": contextObj
@@ -864,7 +836,7 @@ function PopulateLeaderBoardCallback(r)
         for(var i in statements)
         {
             //Group the statements by the name of the actor
-            if(statements[i].verb.id == answered_verb.id)
+            if(statements[i].verb.id == ADL.verbs.answered.id)
             {
                     var found = false;
                     var actorname = statements[i].actor.name;
@@ -893,7 +865,7 @@ function PopulateLeaderBoardCallback(r)
         for(var i in statements)
         {
         //Group the statements by the name of the actor
-            if(statements[i].verb.id == completed_verb)
+            if(statements[i].verb.id == ADL.verbs.completed)
             {
                     
                     var actorname = statements[i].actor.name;
@@ -1028,7 +1000,7 @@ function LoadProgressFromLRSCallback(r)
         jqmDialogClose();
         
         jqmDialogOpen("Loading Puzzle Guesses");
-        TCDriver_GetStatements(tc_lrs,null,completed_verb.id,null,LoadGuessesFromLRSCallback);
+        TCDriver_GetStatements(tc_lrs,null,ADL.verbs.completed.id,null,LoadGuessesFromLRSCallback);
         }
     else{
             var moreQueryString = URI(result.more).query(true);
@@ -1043,7 +1015,7 @@ function LoadProgressFromLRS()
     try{
     InitLRSConnection();
     jqmDialogOpen("Loading progress");
-    TCDriver_GetStatements(tc_lrs,null,answered_verb.id,null,LoadProgressFromLRSCallback);
+    TCDriver_GetStatements(tc_lrs,null,ADL.verbs.answered.id,null,LoadProgressFromLRSCallback);
     }catch(e)
     {
     // alert(JSON.stringify(e));
