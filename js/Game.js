@@ -5,7 +5,6 @@ var dim = 8;            //the dimentions of the game board
 var Progress;           //The array of gCodes already discovered
 var Count = 0;          //A global counter used during the progressive reveal of tiles on initialize
 var initialized = false;    //Flag for initialized
-var tc_lrs = null;      //holds LRS connection data
 var gProfiles = null;       //array of profiles from LRS
 var gActiveQuestion;        //The currently executing question
 var gGuessMaximum = 5;
@@ -397,19 +396,6 @@ Game.Initialize = Initialize;
 Game.CreateTile = CreateTile;
 Game.RemoveTile = RemoveTile;
 
-//Get the endpoint for the LRS connection
-function GetTCProps()
-{
-    props['actor'] = { "mbox":localStorage["UserEmail"], "name":localStorage["UserName"] };
-    return props
-}
-//Get the LRS connection object.
-function InitLRSConnection()
-{
-    if(tc_lrs == null)
-    tc_lrs = TCDriver_GetLRSObject();
-}
-
 //Switch to the GamePage
 function ShowGamePage()
 {
@@ -542,9 +528,7 @@ function ProfilesReceivedSignIn(e)
 //Get the profiles for all users
 function GetProfiles()
 {
-    // if(!gProfiles)
-    TCDriver_GetStatements(tc_lrs,null,ADL.verbs.registered.id,null,ProfilesReceivedSignUp);
-    // ProfilesReceivedSignUp();
+    ADL.XAPIWrapper.getStatements({"verb":ADL.verbs.registered.id}, null, ProfilesReceivedSignUp);
 }
 
 //Email Validation Javascript
@@ -614,7 +598,6 @@ function validateEmail(addr,man,db) {
 function DoSetupActor()
 {
     jqmDialogOpen("Creating Profile");
-    InitLRSConnection();
     gTempUsername = $.trim($("#username").val());
     gEmailCheck = $.trim($("#email").val());
     gPassword = $.trim($("#password").val());
@@ -641,7 +624,6 @@ function DoSetupActor()
 function DoSignIn()
 {
     jqmDialogOpen("Signing In");
-    InitLRSConnection();
 
     gEmailCheck = $.trim($("#email2").val());
     gPassword = $.trim($("#password2").val());
@@ -653,11 +635,7 @@ function DoSignIn()
     return;
     }
 
-    //Get the profiles, with the correct callback to check for password
-   // if(!gProfiles)
-    TCDriver_GetStatements(tc_lrs,null,ADL.verbs.registered.id,null,ProfilesReceivedSignIn);
-   // ProfilesReceivedSignIn();
-
+    ADL.XAPIWrapper.getStatements({"verb":ADL.verbs.registered.id}, null, ProfilesReceivedSignIn);
 }   
 
 //Close a popup dialog
@@ -716,8 +694,7 @@ function LogSubmitGuess(answer,correct)
         "result":result
     };
 
-    TCDriver_SendStatement(tc_lrs, stmt,function(){});
-
+    ADL.XAPIWrapper.sendStatement(stmt, function(){});
 }
 
 //Log to the LRS an attempt to uncover a tile
@@ -743,7 +720,7 @@ function LogAttempt(email,name,id,callback)
         "context": contextObj
     };
 
-    TCDriver_SendStatement(tc_lrs, stmt,callback);
+    ADL.XAPIWrapper.sendStatement(stmt, callback);
 }
 
 //Log to the LRS an answered question
@@ -767,7 +744,7 @@ function LogQuestion(name,email,Question,answer,callback)
         "result":result
     };
 
-    TCDriver_SendStatement(tc_lrs, stmt,callback);
+    ADL.XAPIWrapper.sendStatement(stmt, callback);
 }
 //Create a new profile on the LRS
 function CreateProfile(email,name, password,callback)
@@ -793,7 +770,7 @@ function CreateProfile(email,name, password,callback)
         "context": contextObj
     };
 
-    TCDriver_SendStatement(tc_lrs, stmt,null,callback);
+    ADL.XAPIWrapper.sendStatement(stmt, callback);
 }
 //Used when sorting list of scores
 function compare(x,y)
@@ -900,9 +877,7 @@ function PopulateLeaderBoardCallback(r)
             $('#lboard').collapsibleset('refresh');
             jqmDialogClose();
         }else{
-            // var moreQueryString = URI(result.more).query(true);
-            // should come in as a relative path (not including scheme host or port)
-            TCDriver_GetStatementsResume(tc_lrs,result.more.continueToken,callback);
+            ADL.XAPIWrapper.getStatements(null,result.more, callback);
         }
     }
     callback(r);
@@ -962,8 +937,7 @@ function LoadGuessesFromLRSCallback(r)
         ShowGamePage();
     }
     else{
-            var moreQueryString = URI(result.more).query(true);
-            TCDriver_GetStatementsResume(tc_lrs,moreQueryString.continueToken,callback);
+        ADL.XAPIWrapper.getStatements(null, result.more, callback);
     }
     }//callback e  
     callback(r);
@@ -1000,11 +974,10 @@ function LoadProgressFromLRSCallback(r)
         jqmDialogClose();
         
         jqmDialogOpen("Loading Puzzle Guesses");
-        TCDriver_GetStatements(tc_lrs,null,ADL.verbs.completed.id,null,LoadGuessesFromLRSCallback);
+        ADL.XAPIWrapper.getStatements({"verb":ADL.verbs.completed.id}, null, LoadGuessesFromLRSCallback);
         }
     else{
-            var moreQueryString = URI(result.more).query(true);
-            TCDriver_GetStatementsResume(tc_lrs,moreQueryString.continueToken,callback);
+        ADL.XAPIWrapper.getStatements(null, result.more, callback);
     }
     }//callback e  
     callback(r);
@@ -1013,9 +986,8 @@ function LoadProgressFromLRSCallback(r)
 function LoadProgressFromLRS()
 {
     try{
-    InitLRSConnection();
     jqmDialogOpen("Loading progress");
-    TCDriver_GetStatements(tc_lrs,null,ADL.verbs.answered.id,null,LoadProgressFromLRSCallback);
+    ADL.XAPIWrapper.getStatements({"verb":ADL.verbs.answered.id},null, LoadProgressFromLRSCallback);
     }catch(e)
     {
     // alert(JSON.stringify(e));
@@ -1027,11 +999,10 @@ function LoadProgressFromLRS()
 function PopulateLeaderBoard()
 {
     try{
-    InitLRSConnection();
     jqmDialogOpen("Downloading Stats");
     // alert('PopulateLeaderBoard');
     $('#refresh').addClass('ui-btn-active'); window.setTimeout(function(){$('#refresh').removeClass('ui-btn-active');},200);
-    TCDriver_GetStatements(tc_lrs,null,null,null,PopulateLeaderBoardCallback);
+    ADL.XAPIWrapper.getStatements(null, null, PopulateLeaderBoardCallback);
     }catch(e)
     {
     // alert(JSON.stringify(e));
@@ -1088,8 +1059,7 @@ function PollForEventsCallback(r)
         $('#EventList').listview('refresh');
             }
                 else{
-            var moreQueryString = URI(result.more).query(true);
-            TCDriver_GetStatementsResume(tc_lrs,moreQueryString.continueToken,callback);
+            ADL.XAPIWrapper.getStatements(null, result.more, callback);
         }
     
     }//callback e
@@ -1100,15 +1070,10 @@ callback(r);
 //Get all the events in the last 5 seconds
 function PollForEvents()
 {
-    InitLRSConnection();
-    var now = new Date();
-    now.setMilliseconds(0);
-    //Set the time slicing params for the LRS Search functions
-    tc_lrs.until = now;
-    tc_lrs.since = new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours(),now.getMinutes(),now.getSeconds()-5);
-
-
-    TCDriver_GetStatements(tc_lrs,null,null,null,PollForEventsCallback);
+    var params = ADL.XAPIWrapper.searchParams();
+    params["until"] = (new Date()).toISOString();
+    params["since"] = (new Date(now.getFullYear(),now.getMonth(),now.getDate(),now.getHours(),now.getMinutes(),now.getSeconds()-5)).toISOString();
+    ADL.XAPIWrapper.getStatements(params, null, PollForEventsCallback);
 }
 
 // A user is answering a question
@@ -1182,7 +1147,6 @@ $(document).ready(function(){
 
     jQuery.fx.interval = 100;
     window.scrollTo(0,1);
-    InitLRSConnection();
 
     var QueryString = parseQueryString();
     gCurrentAction = QueryString["action"];
@@ -1194,7 +1158,8 @@ $(document).ready(function(){
     {
     jqmDialogOpen('New User Login');
     window.setTimeout(function(){$.mobile.changePage($('#login'),{ transition: 'none', changeHash: false });},500);
-
+    props['actor'] = { "mbox":localStorage["UserEmail"], "name":localStorage["UserName"] };
+    ADL.XAPIWrapper.changeConfig(props);
     return;
     }
     
@@ -1204,10 +1169,6 @@ $(document).ready(function(){
 
 //*******************************************************************************************
 //jQuery Mobile event binding
-
-
-
-$("#login").live("pageinit",function (event) {InitLRSConnection();});
 $("#login").live("pageshow",function (event) {jqmDialogClose();});
 
 $('#LeaderBoard').live('pageinit', function (event) {if(LeaderboardPopulated == false) PopulateLeaderBoard();});
